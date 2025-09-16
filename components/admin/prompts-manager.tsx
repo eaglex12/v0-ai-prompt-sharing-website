@@ -77,7 +77,10 @@ export function PromptsManager() {
       .order("created_at", { ascending: false })
 
     // Load categories
-    const { data: categoriesData } = await supabase.from("categories").select("*").order("name")
+    const { data: categoriesData } = await supabase
+      .from("categories")
+      .select("*")
+      .order("name")
 
     setPrompts(promptsData || [])
     setCategories(categoriesData || [])
@@ -94,24 +97,32 @@ export function PromptsManager() {
       const supabase = createClient()
 
       const promptData = {
-        ...formData,
+        title: formData.title,
+        content: formData.content,
+        description: formData.description || null,
+        category_id: formData.category_id || null,
+        reference_image_url: formData.reference_image_url || null,
         tags: formData.tags
           .split(",")
           .map((tag) => tag.trim())
           .filter(Boolean),
-        category_id: formData.category_id || null,
-        reference_image_url: formData.reference_image_url || null,
+        is_trending: formData.is_trending,
+        is_featured: formData.is_featured,
       }
 
       if (editingPrompt) {
         // Update existing prompt
-        const { error } = await supabase.from("prompts").update(promptData).eq("id", editingPrompt.id)
+        const { error } = await supabase
+          .from("prompts")
+          .update(promptData)
+          .eq("id", editingPrompt.id)
 
         if (error) {
           console.error("Error updating prompt:", error)
           setError(`Failed to update prompt: ${error.message}`)
           return
         }
+        
         setSuccess("Prompt updated successfully!")
       } else {
         // Create new prompt
