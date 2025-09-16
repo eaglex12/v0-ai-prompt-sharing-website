@@ -5,6 +5,8 @@ import { DM_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
+import Script from "next/script";
+
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -31,7 +33,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+      <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2340577707616384"
+     crossOrigin="anonymous" strategy="afterInteractive"/>
+      </head>
       <body className={`font-sans ${spaceGrotesk.variable} ${dmSans.variable}`}>
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />
