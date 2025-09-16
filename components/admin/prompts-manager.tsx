@@ -29,6 +29,9 @@ export function PromptsManager() {
   const [isLoading, setIsLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
     title: "",
@@ -44,6 +47,17 @@ export function PromptsManager() {
   useEffect(() => {
     loadData()
   }, [])
+
+  // Clear messages after 5 seconds
+  useEffect(() => {
+    if (error || success) {
+      const timer = setTimeout(() => {
+        setError(null)
+        setSuccess(null)
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [error, success])
 
   const loadData = async () => {
     const supabase = createClient()
@@ -72,50 +86,65 @@ export function PromptsManager() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
+    setIsSubmitting(true)
+    setError(null)
+    setSuccess(null)
+    
+    try {
+      const supabase = createClient()
 
-    const promptData = {
-      ...formData,
-      tags: formData.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-      category_id: formData.category_id || null,
-      reference_image_url: formData.reference_image_url || null,
-    }
-
-    if (editingPrompt) {
-      // Update existing prompt
-      const { error } = await supabase.from("prompts").update(promptData).eq("id", editingPrompt.id)
-
-      if (error) {
-        console.error("Error updating prompt:", error)
-        return
+      const promptData = {
+        ...formData,
+        tags: formData.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+        category_id: formData.category_id || null,
+        reference_image_url: formData.reference_image_url || null,
       }
-    } else {
-      // Create new prompt
-      const { error } = await supabase.from("prompts").insert(promptData)
 
-      if (error) {
-        console.error("Error creating prompt:", error)
-        return
+      if (editingPrompt) {
+        // Update existing prompt
+        const { error } = await supabase.from("prompts").update(promptData).eq("id", editingPrompt.id)
+
+        if (error) {
+          console.error("Error updating prompt:", error)
+          setError(`Failed to update prompt: ${error.message}`)
+          return
+        }
+        setSuccess("Prompt updated successfully!")
+      } else {
+        // Create new prompt
+        const { error } = await supabase.from("prompts").insert(promptData)
+
+        if (error) {
+          console.error("Error creating prompt:", error)
+          setError(`Failed to create prompt: ${error.message}`)
+          return
+        }
+        setSuccess("Prompt created successfully!")
       }
-    }
 
-    // Reset form and reload data
-    setFormData({
-      title: "",
-      content: "",
-      description: "",
-      category_id: "",
-      reference_image_url: "",
-      tags: "",
-      is_trending: false,
-      is_featured: false,
-    })
-    setEditingPrompt(null)
-    setIsDialogOpen(false)
-    loadData()
+      // Reset form and reload data
+      setFormData({
+        title: "",
+        content: "",
+        description: "",
+        category_id: "",
+        reference_image_url: "",
+        tags: "",
+        is_trending: false,
+        is_featured: false,
+      })
+      setEditingPrompt(null)
+      setIsDialogOpen(false)
+      await loadData()
+    } catch (err) {
+      console.error("Unexpected error:", err)
+      setError("An unexpected error occurred. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleEdit = (prompt: Prompt) => {
@@ -136,15 +165,23 @@ export function PromptsManager() {
   const handleDelete = async (promptId: string) => {
     if (!confirm("Are you sure you want to delete this prompt?")) return
 
-    const supabase = createClient()
-    const { error } = await supabase.from("prompts").delete().eq("id", promptId)
+    try {
+      setError(null)
+      const supabase = createClient()
+      const { error } = await supabase.from("prompts").delete().eq("id", promptId)
 
-    if (error) {
-      console.error("Error deleting prompt:", error)
-      return
+      if (error) {
+        console.error("Error deleting prompt:", error)
+        setError(`Failed to delete prompt: ${error.message}`)
+        return
+      }
+
+      setSuccess("Prompt deleted successfully!")
+      await loadData()
+    } catch (err) {
+      console.error("Unexpected error:", err)
+      setError("An unexpected error occurred while deleting. Please try again.")
     }
-
-    loadData()
   }
 
   if (isLoading) {
@@ -153,6 +190,18 @@ export function PromptsManager() {
 
   return (
     <div className="space-y-6">
+      {/* Error and Success Messages */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
+          {success}
+        </div>
+      )}
+      
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">All Prompts ({prompts.length})</h3>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -256,7 +305,9 @@ export function PromptsManager() {
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit">{editingPrompt ? "Update" : "Create"} Prompt</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : editingPrompt ? "Update" : "Create"} Prompt
+                </Button>
               </div>
             </form>
           </DialogContent>
