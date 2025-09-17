@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Search, Heart, Copy, Share2, TrendingUp, Sparkles } from "lucide-react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -252,11 +253,12 @@ export function HomePage() {
                   onMouseEnter={() => handlePromptView(prompt.id)}
                 >
                   <CardHeader className="p-0">
-                    <div className="relative overflow-hidden rounded-t-lg">
-                      <img
-                        src={prompt.reference_image_url || "/placeholder.svg?height=192&width=384"}
+                    <div className="relative overflow-hidden rounded-t-lg h-48">
+                      <Image
+                        src={prompt.reference_image_url || "/placeholder.svg"}
                         alt={prompt.title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       {prompt.is_trending && (
                         <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground">Trending</Badge>

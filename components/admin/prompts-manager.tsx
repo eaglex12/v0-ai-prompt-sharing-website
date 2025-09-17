@@ -19,8 +19,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
+import { ImageUpload } from "@/components/ui/image-upload"
 import { createClient } from "@/lib/supabase/client"
 import { Plus, Edit, Trash2, Eye, Copy, Heart } from "lucide-react"
+import Image from "next/image"
 import type { Prompt, Category } from "@/lib/database/prompts"
 
 export function PromptsManager() {
@@ -276,15 +278,11 @@ export function PromptsManager() {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
-                <Label htmlFor="reference_image_url">Reference Image URL</Label>
-                <Input
-                  id="reference_image_url"
-                  value={formData.reference_image_url}
-                  onChange={(e) => setFormData({ ...formData, reference_image_url: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                />
-              </div>
+              <ImageUpload
+                value={formData.reference_image_url}
+                onChange={(url) => setFormData({ ...formData, reference_image_url: url || "" })}
+                disabled={isSubmitting}
+              />
               <div>
                 <Label htmlFor="tags">Tags (comma-separated)</Label>
                 <Input
@@ -346,6 +344,16 @@ export function PromptsManager() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
+                {prompt.reference_image_url && (
+                  <div className="relative w-full h-32 rounded-lg overflow-hidden">
+                    <Image
+                      src={prompt.reference_image_url}
+                      alt={prompt.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
                 <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                   <div className="flex items-center space-x-1">
                     <Eye className="h-4 w-4" />
