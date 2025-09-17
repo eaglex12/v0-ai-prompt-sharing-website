@@ -8,8 +8,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 interface AnalyticsData {
   totalActions: number
   actionsByType: { name: string; value: number; color: string }[]
-  topPrompts: { title: string; views: number; copies: number; likes: number }[]
+  topPrompts: { title: string; views: number; copies: number; shares: number }[]
   recentActivity: { date: string; actions: number }[]
+  demographics: {
+    countries: { name: string; value: number }[]
+    devices: { name: string; value: number }[]
+    browsers: { name: string; value: number }[]
+  }
 }
 
 export function AnalyticsView() {
@@ -38,14 +43,13 @@ export function AnalyticsView() {
     const actionsByType = [
       { name: "Views", value: actionCounts.view || 0, color: "#3b82f6" },
       { name: "Copies", value: actionCounts.copy || 0, color: "#8b5cf6" },
-      { name: "Likes", value: actionCounts.like || 0, color: "#ef4444" },
       { name: "Shares", value: actionCounts.share || 0, color: "#10b981" },
     ]
 
     // Get top prompts
     const { data: topPromptsData } = await supabase
       .from("prompts")
-      .select("title, views_count, copies_count, likes_count")
+      .select("title, views_count, copies_count")
       .order("views_count", { ascending: false })
       .limit(5)
 
@@ -54,7 +58,7 @@ export function AnalyticsView() {
         title: prompt.title.length > 30 ? prompt.title.substring(0, 30) + "..." : prompt.title,
         views: prompt.views_count,
         copies: prompt.copies_count,
-        likes: prompt.likes_count,
+        shares: 0, // We'll calculate this from analytics data
       })) || []
 
     // Get recent activity (last 7 days)
@@ -77,11 +81,55 @@ export function AnalyticsView() {
       }
     }).reverse()
 
+    // Get demographic data
+    const { data: demographicData } = await supabase
+      .from("prompt_analytics")
+      .select("country, device, browser")
+
+    // Process country data
+    const countryCounts = demographicData?.reduce((acc: Record<string, number>, item) => {
+      const country = item.country || "Unknown"
+      acc[country] = (acc[country] || 0) + 1
+      return acc
+    }, {}) || {}
+
+    const countries = Object.entries(countryCounts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10)
+
+    // Process device data
+    const deviceCounts = demographicData?.reduce((acc: Record<string, number>, item) => {
+      const device = item.device || "Unknown"
+      acc[device] = (acc[device] || 0) + 1
+      return acc
+    }, {}) || {}
+
+    const devices = Object.entries(deviceCounts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+
+    // Process browser data
+    const browserCounts = demographicData?.reduce((acc: Record<string, number>, item) => {
+      const browser = item.browser || "Unknown"
+      acc[browser] = (acc[browser] || 0) + 1
+      return acc
+    }, {}) || {}
+
+    const browsers = Object.entries(browserCounts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+
     setAnalytics({
       totalActions: totalActions || 0,
       actionsByType,
       topPrompts,
       recentActivity,
+      demographics: {
+        countries,
+        devices,
+        browsers,
+      },
     })
     setIsLoading(false)
   }
@@ -165,11 +213,77 @@ export function AnalyticsView() {
               <Tooltip />
               <Bar dataKey="views" fill="#3b82f6" name="Views" />
               <Bar dataKey="copies" fill="#8b5cf6" name="Copies" />
-              <Bar dataKey="likes" fill="#ef4444" name="Likes" />
+              <Bar dataKey="shares" fill="#10b981" name="Shares" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
+
+      {/* Demographic Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Top Countries</CardTitle>
+            <CardDescription>Geographic distribution of visitors</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={analytics.demographics.countries}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {analytics.demographics.countries.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={`hsl(${index * 40}, 70%, 50%)`} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Device Types</CardTitle>
+            <CardDescription>Distribution by device type</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={analytics.demographics.devices}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill="#8b5cf6" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Browser Usage</CardTitle>
+            <CardDescription>Most popular browsers</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={analytics.demographics.browsers}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill="#10b981" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

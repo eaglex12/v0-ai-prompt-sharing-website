@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Heart, Copy, Share2, TrendingUp, Sparkles } from "lucide-react"
+import { Search, Copy, Share2, TrendingUp, Sparkles } from "lucide-react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -183,8 +183,8 @@ export function HomePage() {
                           </Badge>
                         )}
                         <div className="flex items-center gap-1 text-muted-foreground text-sm">
-                          <Heart className="h-4 w-4" />
-                          {prompt.likes_count}
+                          <Copy className="h-4 w-4" />
+                          {prompt.copies_count}
                         </div>
                       </div>
                       <h3 className="font-heading font-semibold text-lg mb-2 text-card-foreground">{prompt.title}</h3>
@@ -207,11 +207,6 @@ export function HomePage() {
                       <InteractionTracker promptId={prompt.id} action="share">
                         <Button size="sm" variant="outline">
                           <Share2 className="h-4 w-4" />
-                        </Button>
-                      </InteractionTracker>
-                      <InteractionTracker promptId={prompt.id} action="like">
-                        <Button size="sm" variant="outline">
-                          <Heart className="h-4 w-4" />
                         </Button>
                       </InteractionTracker>
                     </CardFooter>
@@ -284,10 +279,6 @@ export function HomePage() {
                       )}
                       <div className="flex items-center gap-3 text-muted-foreground text-sm">
                         <div className="flex items-center gap-1">
-                          <Heart className="h-4 w-4" />
-                          {prompt.likes_count}
-                        </div>
-                        <div className="flex items-center gap-1">
                           <Copy className="h-4 w-4" />
                           {prompt.copies_count}
                         </div>
@@ -318,11 +309,6 @@ export function HomePage() {
                     <InteractionTracker promptId={prompt.id} action="share">
                       <Button size="sm" variant="outline">
                         <Share2 className="h-4 w-4" />
-                      </Button>
-                    </InteractionTracker>
-                    <InteractionTracker promptId={prompt.id} action="like">
-                      <Button size="sm" variant="outline">
-                        <Heart className="h-4 w-4" />
                       </Button>
                     </InteractionTracker>
                   </CardFooter>

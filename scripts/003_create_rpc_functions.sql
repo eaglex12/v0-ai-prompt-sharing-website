@@ -17,11 +17,3 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION increment_likes_count(prompt_id UUID)
-RETURNS void AS $$
-BEGIN
-  UPDATE prompts 
-  SET likes_count = likes_count + 1 
-  WHERE id = prompt_id;
-END;
-$$ LANGUAGE plpgsql;

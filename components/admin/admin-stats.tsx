@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/lib/supabase/server"
-import { Eye, Copy, Heart, TrendingUp } from "lucide-react"
+import { Eye, Copy, Users, Globe, TrendingUp } from "lucide-react"
 
 export async function AdminStats() {
   const supabase = await createClient()
@@ -8,20 +8,25 @@ export async function AdminStats() {
   // Get total prompts
   const { count: totalPrompts } = await supabase.from("prompts").select("*", { count: "exact", head: true })
 
-  // Get total views
-  const { data: viewsData } = await supabase.from("prompts").select("views_count")
+  // Get live analytics data from prompt_analytics table
+  const { data: analyticsData } = await supabase
+    .from("prompt_analytics")
+    .select("action_type, created_at, country, device, browser")
 
-  const totalViews = viewsData?.reduce((sum, prompt) => sum + prompt.views_count, 0) || 0
+  // Calculate live metrics
+  const totalViews = analyticsData?.filter(item => item.action_type === "view").length || 0
+  const totalCopies = analyticsData?.filter(item => item.action_type === "copy").length || 0
+  const totalShares = analyticsData?.filter(item => item.action_type === "share").length || 0
 
-  // Get total copies
-  const { data: copiesData } = await supabase.from("prompts").select("copies_count")
+  // Get unique visitors (based on unique combinations of IP and user agent)
+  const uniqueVisitors = new Set(
+    analyticsData?.map(item => `${item.created_at}-${item.country}-${item.device}`) || []
+  ).size
 
-  const totalCopies = copiesData?.reduce((sum, prompt) => sum + prompt.copies_count, 0) || 0
-
-  // Get total likes
-  const { data: likesData } = await supabase.from("prompts").select("likes_count")
-
-  const totalLikes = likesData?.reduce((sum, prompt) => sum + prompt.likes_count, 0) || 0
+  // Get unique countries
+  const uniqueCountries = new Set(
+    analyticsData?.map(item => item.country).filter(Boolean) || []
+  ).size
 
   const stats = [
     {
@@ -32,30 +37,44 @@ export async function AdminStats() {
       color: "text-blue-600",
     },
     {
-      title: "Total Views",
+      title: "Live Views",
       value: totalViews,
-      description: "Prompt page views",
+      description: "Real-time page views",
       icon: Eye,
       color: "text-green-600",
     },
     {
-      title: "Total Copies",
+      title: "Live Copies",
       value: totalCopies,
-      description: "Prompts copied by users",
+      description: "Real-time copies made",
       icon: Copy,
       color: "text-purple-600",
     },
     {
-      title: "Total Likes",
-      value: totalLikes,
-      description: "Likes across all prompts",
-      icon: Heart,
-      color: "text-red-600",
+      title: "Unique Visitors",
+      value: uniqueVisitors,
+      description: "Distinct visitors tracked",
+      icon: Users,
+      color: "text-orange-600",
+    },
+    {
+      title: "Countries",
+      value: uniqueCountries,
+      description: "Geographic reach",
+      icon: Globe,
+      color: "text-cyan-600",
+    },
+    {
+      title: "Shares",
+      value: totalShares,
+      description: "Social shares tracked",
+      icon: Copy,
+      color: "text-pink-600",
     },
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
       {stats.map((stat) => (
         <Card key={stat.title}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

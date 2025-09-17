@@ -5,7 +5,7 @@ import { useAnalytics } from "@/hooks/use-analytics"
 
 interface InteractionTrackerProps {
   promptId: string
-  action: "copy" | "like" | "share"
+  action: "copy" | "share"
   children: React.ReactElement
 }
 
@@ -22,9 +22,6 @@ export function InteractionTracker({ promptId, action, children }: InteractionTr
     switch (action) {
       case "copy":
         await analytics.trackCopy(promptId)
-        break
-      case "like":
-        await analytics.trackLike(promptId)
         break
       case "share":
         await analytics.trackShare(promptId)

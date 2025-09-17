@@ -8,7 +8,6 @@ export interface Prompt {
   category_id: string | null
   reference_image_url: string | null
   tags: string[]
-  likes_count: number
   views_count: number
   copies_count: number
   is_trending: boolean
@@ -71,7 +70,7 @@ export async function getTrendingPrompts(): Promise<Prompt[]> {
       )
     `)
     .eq("is_trending", true)
-    .order("likes_count", { ascending: false })
+    .order("views_count", { ascending: false })
     .limit(6)
 
   if (error) {

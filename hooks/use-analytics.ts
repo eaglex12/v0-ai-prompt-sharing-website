@@ -20,14 +20,6 @@ export function useAnalytics() {
     }
   }, [])
 
-  const trackLike = useCallback(async (promptId: string) => {
-    try {
-      await trackPromptAction(promptId, "like")
-    } catch (error) {
-      console.error("Failed to track like:", error)
-    }
-  }, [])
-
   const trackShare = useCallback(async (promptId: string) => {
     try {
       await trackPromptAction(promptId, "share")
@@ -39,7 +31,6 @@ export function useAnalytics() {
   return {
     trackView,
     trackCopy,
-    trackLike,
     trackShare,
   }
 }

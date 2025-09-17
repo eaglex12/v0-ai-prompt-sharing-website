@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS prompts (
   category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
   reference_image_url TEXT,
   tags TEXT[] DEFAULT '{}',
-  likes_count INTEGER DEFAULT 0,
   views_count INTEGER DEFAULT 0,
   copies_count INTEGER DEFAULT 0,
   is_trending BOOLEAN DEFAULT FALSE,
@@ -30,10 +29,17 @@ CREATE TABLE IF NOT EXISTS prompts (
 CREATE TABLE IF NOT EXISTS prompt_analytics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   prompt_id UUID REFERENCES prompts(id) ON DELETE CASCADE,
-  action_type TEXT NOT NULL, -- 'view', 'copy', 'like', 'share'
+  action_type TEXT NOT NULL, -- 'view', 'copy', 'share'
   ip_address INET,
   user_agent TEXT,
   referrer TEXT,
+  country TEXT,
+  city TEXT,
+  device TEXT,
+  browser TEXT,
+  os TEXT,
+  screen_resolution TEXT,
+  language TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
