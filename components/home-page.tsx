@@ -15,6 +15,8 @@ import {
 } from "@/lib/database/prompts-client"
 import { useAnalytics } from "@/hooks/use-analytics"
 import { InteractionTracker } from "@/components/analytics/interaction-tracker"
+import { SidebarAd } from "@/components/ads/sidebar-ad"
+import { BannerAd } from "@/components/ads/banner-ad"
 import type { Prompt, Category } from "@/lib/database/prompts-client"
 
 export function HomePage() {
@@ -133,14 +135,10 @@ export function HomePage() {
 
       <div className="container mx-auto px-4 py-8">
         {/* Ad Space - Left Sidebar */}
-        <div className="hidden lg:block fixed left-4 top-1/2 transform -translate-y-1/2 w-32 h-96 bg-muted rounded-lg border border-border">
-          <div className="flex items-center justify-center h-full text-muted-foreground text-sm">Ad Space</div>
-        </div>
+        <SidebarAd position="left" />
 
         {/* Ad Space - Right Sidebar */}
-        <div className="hidden lg:block fixed right-4 top-1/2 transform -translate-y-1/2 w-32 h-96 bg-muted rounded-lg border border-border">
-          <div className="flex items-center justify-center h-full text-muted-foreground text-sm">Ad Space</div>
-        </div>
+        <SidebarAd position="right" />
 
         {/* Main Content */}
         <div className="lg:mx-40">
@@ -221,6 +219,9 @@ export function HomePage() {
               </div>
             </section>
           )}
+
+          {/* Banner Ad */}
+          <BannerAd adSlot="banner-ad-1" />
 
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2 mb-8">
@@ -332,6 +333,9 @@ export function HomePage() {
                 <p className="text-muted-foreground text-lg">No prompts found matching your search.</p>
               </div>
             )}
+
+            {/* Bottom Banner Ad */}
+            <BannerAd adSlot="banner-ad-2" />
           </section>
         </div>
       </div>
