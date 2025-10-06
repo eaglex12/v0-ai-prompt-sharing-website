@@ -40,8 +40,6 @@ export function HomePage() {
 	const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-	const VIEW_PORT_WIDTH = 60;
-
 	const { trackView } = useAnalytics();
 
 	useEffect(() => {
@@ -154,7 +152,7 @@ export function HomePage() {
 					<div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
 					<div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
 				</div>
-				<div className={`max-w-[${VIEW_PORT_WIDTH}vw] mx-auto px-4 pt-12 pb-8`}>
+				<div className={`max-w-[60vw] mx-auto px-4 pt-12 pb-8`}>
 					<div className="text-center">
 						<div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs text-muted-foreground mb-4">
 							<Sparkles className="h-3.5 w-3.5 text-primary" />
@@ -182,7 +180,7 @@ export function HomePage() {
 				</div>
 			</section>
 
-			<div className={`max-w-[${VIEW_PORT_WIDTH}vw] mx-auto px-4 py-8`}>
+			<div className={`max-w-[60vw] mx-auto px-4 py-8`}>
 				{/* Main Content */}
 				<div>
 					{/* Trending Section */}
