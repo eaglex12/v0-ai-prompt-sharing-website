@@ -3,8 +3,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getPromptBySlug } from "@/lib/database/prompts";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Copy, Share2, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import PromptActions from "@/components/prompt-actions";
 
 type PageProps = {
 	params: { slug: string };
@@ -102,22 +102,13 @@ export default async function PromptPage({ params }: PageProps) {
 									))}
 								</div>
 							) : null}
-							<div className="flex gap-2 pt-2">
-								<Button
-									onClick={async () => {
-										try {
-											await navigator.clipboard.writeText(
-												prompt.content
-											);
-										} catch {}
-									}}
-								>
-									<Copy className="h-4 w-4 mr-2" /> Copy
-								</Button>
-								<Button variant="outline">
-									<Share2 className="h-4 w-4 mr-2" /> Share
-								</Button>
-							</div>
+							<PromptActions
+								content={prompt.content}
+								title={prompt.title}
+								shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${
+									prompt.slug
+								}`}
+							/>
 
 							{prompt.seo_content ? (
 								<article
