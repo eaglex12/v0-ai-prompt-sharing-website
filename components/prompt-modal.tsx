@@ -1,3 +1,5 @@
+"use client";
+
 import { Dialog } from "@/components/ui/dialog";
 import {
 	DialogContent,
@@ -12,6 +14,9 @@ import { Copy, Share2 } from "lucide-react";
 import { Prompt } from "@/lib/database/prompts-client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { InteractionTracker } from "@/components/analytics/interaction-tracker";
+import { DummyAd } from "@/components/ads/dummy-ad";
 
 export default function PromptModal({
 	isDialogOpen,
@@ -24,6 +29,50 @@ export default function PromptModal({
 	selectedPrompt: Prompt | null;
 	handleCopy: (content: string, id: string) => void;
 }) {
+	const [isSharing, setIsSharing] = useState(false);
+
+	const handleShare = async () => {
+		if (!selectedPrompt) return;
+
+		setIsSharing(true);
+
+		try {
+			const shareUrl = selectedPrompt.slug
+				? `${window.location.origin}/p/${selectedPrompt.slug}`
+				: window.location.href;
+
+			const shareData = {
+				title: selectedPrompt.title,
+				text: selectedPrompt.description || selectedPrompt.title,
+				url: shareUrl,
+			};
+
+			// Check if Web Share API is supported
+			if (navigator.share && navigator.canShare?.(shareData)) {
+				await navigator.share(shareData);
+			} else {
+				// Fallback: copy URL to clipboard
+				await navigator.clipboard.writeText(shareUrl);
+				// You could add a toast notification here if you have one
+				alert("Link copied to clipboard!");
+			}
+		} catch (error) {
+			console.error("Error sharing:", error);
+			// Fallback: copy URL to clipboard
+			try {
+				const shareUrl = selectedPrompt.slug
+					? `${window.location.origin}/p/${selectedPrompt.slug}`
+					: window.location.href;
+				await navigator.clipboard.writeText(shareUrl);
+				alert("Link copied to clipboard!");
+			} catch (clipboardError) {
+				console.error("Error copying to clipboard:", clipboardError);
+				alert("Unable to share. Please copy the URL manually.");
+			}
+		} finally {
+			setIsSharing(false);
+		}
+	};
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 			<DialogContent className="sm:max-w-2xl">
@@ -55,18 +104,26 @@ export default function PromptModal({
 					<div className="rounded-md border bg-muted/60 p-3 max-h-48 overflow-auto text-xs text-muted-foreground">
 						{selectedPrompt?.content}
 					</div>
+
+					{/* Ad in modal */}
+					<div className="pt-4">
+						<DummyAd variant="banner" />
+					</div>
 				</div>
 				<DialogFooter>
-					<Button
-						onClick={() =>
-							selectedPrompt &&
-							handleCopy(selectedPrompt.content, selectedPrompt.id)
-						}
-						className="bg-primary hover:bg-primary/90"
-						size="sm"
-					>
-						<Copy className="h-4 w-4 mr-2" /> Copy prompt
-					</Button>
+					{selectedPrompt && (
+						<InteractionTracker promptId={selectedPrompt.id} action="copy">
+							<Button
+								onClick={() =>
+									handleCopy(selectedPrompt.content, selectedPrompt.id)
+								}
+								className="bg-primary hover:bg-primary/90"
+								size="sm"
+							>
+								<Copy className="h-4 w-4 mr-2" /> Copy prompt
+							</Button>
+						</InteractionTracker>
+					)}
 					{selectedPrompt?.slug && (
 						<Link href={`/p/${selectedPrompt.slug}`} prefetch>
 							<Button variant="secondary" size="sm">
@@ -74,9 +131,19 @@ export default function PromptModal({
 							</Button>
 						</Link>
 					)}
-					<Button variant="outline" size="sm">
-						<Share2 className="h-4 w-4 mr-2" /> Share
-					</Button>
+					{selectedPrompt && (
+						<InteractionTracker promptId={selectedPrompt.id} action="share">
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={handleShare}
+								disabled={isSharing}
+							>
+								<Share2 className="h-4 w-4 mr-2" />
+								{isSharing ? "Sharing..." : "Share"}
+							</Button>
+						</InteractionTracker>
+					)}
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

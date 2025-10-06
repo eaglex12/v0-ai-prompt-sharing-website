@@ -5,6 +5,8 @@ import { getPromptBySlug } from "@/lib/database/prompts";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles } from "lucide-react";
 import PromptActions from "@/components/prompt-actions";
+import { PageViewTracker } from "@/components/analytics/page-view-tracker";
+import { DummyAd } from "@/components/ads/dummy-ad";
 
 type PageProps = {
 	params: { slug: string };
@@ -44,6 +46,7 @@ export default async function PromptPage({ params }: PageProps) {
 
 	return (
 		<div className="min-h-screen bg-background">
+			<PageViewTracker promptId={prompt.id} />
 			<header className="border-b border-border">
 				<div className="max-w-[80vw] mx-auto px-4 py-6 flex items-center gap-2">
 					<Sparkles className="h-6 w-6 text-primary" />
@@ -108,6 +111,7 @@ export default async function PromptPage({ params }: PageProps) {
 								shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${
 									prompt.slug
 								}`}
+								promptId={prompt.id}
 							/>
 
 							{prompt.seo_content ? (
@@ -118,6 +122,11 @@ export default async function PromptPage({ params }: PageProps) {
 									}}
 								/>
 							) : null}
+
+							{/* Ad after content */}
+							<div className="border-t border-border pt-6">
+								<DummyAd variant="rectangle" />
+							</div>
 						</div>
 					</div>
 				</section>
@@ -132,6 +141,9 @@ export default async function PromptPage({ params }: PageProps) {
 							{prompt.is_featured ? <p>Featured</p> : null}
 						</div>
 					</div>
+
+					{/* Sidebar Ad */}
+					<DummyAd variant="square" />
 				</aside>
 			</main>
 		</div>

@@ -1,31 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search, Copy, Share2, TrendingUp, Sparkles } from "lucide-react";
-import Image from "next/image";
+import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
+import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-	getAllPrompts,
-	getTrendingPrompts,
-	getAllCategories,
-	searchPrompts,
-	getPromptsByCategory,
-} from "@/lib/database/prompts-client";
 import { useAnalytics } from "@/hooks/use-analytics";
-import { InteractionTracker } from "@/components/analytics/interaction-tracker";
-import { BannerAd } from "@/components/ads/banner-ad";
+import type { Category, Prompt } from "@/lib/database/prompts-client";
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import type { Prompt, Category } from "@/lib/database/prompts-client";
+	getAllCategories,
+	getAllPrompts,
+	getPromptsByCategory,
+	getTrendingPrompts,
+	searchPrompts,
+} from "@/lib/database/prompts-client";
+import { Search, Sparkles, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
 import PromptCard from "./prompt-card";
 import PromptModal from "./prompt-modal";
 
@@ -210,7 +199,7 @@ export function HomePage() {
 					)}
 
 					{/* Banner Ad */}
-					<BannerAd adSlot="banner-ad-1" />
+					<EnhancedBannerAd adSlot="banner-ad-1" />
 
 					{/* Category Filter */}
 					<div className="flex flex-wrap gap-2 mb-8">
@@ -264,10 +253,14 @@ export function HomePage() {
 						)}
 
 						{/* Bottom Banner Ad */}
-						<BannerAd adSlot="banner-ad-2" />
+						<EnhancedBannerAd adSlot="banner-ad-2" />
 					</section>
 				</div>
 			</div>
+
+			{/* Sidebar Ads */}
+			<EnhancedSidebarAd position="left" />
+			<EnhancedSidebarAd position="right" />
 
 			{/* Prompt Detail Modal */}
 			<PromptModal

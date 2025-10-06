@@ -408,7 +408,7 @@ export function PromptsManager() {
 				</Dialog>
 			</div>
 
-			<div className="grid gap-4">
+			<div className="grid grid-cols-3 gap-5">
 				{prompts.map((prompt) => (
 					<Card key={prompt.id}>
 						<CardHeader>

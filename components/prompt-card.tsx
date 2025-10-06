@@ -1,9 +1,12 @@
+"use client";
+
 import { Card, CardHeader, CardFooter, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InteractionTracker } from "@/components/analytics/interaction-tracker";
 import { Prompt } from "@/lib/database/prompts-client";
+import { useState } from "react";
 
 export default function PromptCard({
 	prompt,
@@ -20,6 +23,47 @@ export default function PromptCard({
 	setSelectedPrompt: (prompt: Prompt) => void;
 	setIsDialogOpen: (isOpen: boolean) => void;
 }) {
+	const [isSharing, setIsSharing] = useState(false);
+
+	const handleShare = async () => {
+		setIsSharing(true);
+
+		try {
+			const shareUrl = prompt.slug
+				? `${window.location.origin}/p/${prompt.slug}`
+				: window.location.href;
+
+			const shareData = {
+				title: prompt.title,
+				text: prompt.description || prompt.title,
+				url: shareUrl,
+			};
+
+			// Check if Web Share API is supported
+			if (navigator.share && navigator.canShare?.(shareData)) {
+				await navigator.share(shareData);
+			} else {
+				// Fallback: copy URL to clipboard
+				await navigator.clipboard.writeText(shareUrl);
+				alert("Link copied to clipboard!");
+			}
+		} catch (error) {
+			console.error("Error sharing:", error);
+			// Fallback: copy URL to clipboard
+			try {
+				const shareUrl = prompt.slug
+					? `${window.location.origin}/p/${prompt.slug}`
+					: window.location.href;
+				await navigator.clipboard.writeText(shareUrl);
+				alert("Link copied to clipboard!");
+			} catch (clipboardError) {
+				console.error("Error copying to clipboard:", clipboardError);
+				alert("Unable to share. Please copy the URL manually.");
+			}
+		} finally {
+			setIsSharing(false);
+		}
+	};
 	return (
 		<Card
 			key={prompt.id}
@@ -82,8 +126,14 @@ export default function PromptCard({
 					</Button>
 				</InteractionTracker>
 				<InteractionTracker promptId={prompt.id} action="share">
-					<Button size="sm" variant="outline">
+					<Button
+						size="sm"
+						variant="outline"
+						onClick={handleShare}
+						disabled={isSharing}
+					>
 						<Share2 className="h-4 w-4" />
+						{isSharing && <span className="ml-1 text-xs">...</span>}
 					</Button>
 				</InteractionTracker>
 				<Button

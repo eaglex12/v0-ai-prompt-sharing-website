@@ -76,7 +76,7 @@ export async function getTrendingPrompts(): Promise<Prompt[]> {
     `
 		)
 		.eq("is_trending", true)
-		.order("views_count", { ascending: false })
+		.order("copies_count", { ascending: false })
 		.limit(6);
 
 	if (error) {
