@@ -48,13 +48,13 @@ export default async function PromptPage({ params }: PageProps) {
 		<div className="min-h-screen bg-background">
 			<PageViewTracker promptId={prompt.id} />
 			<header className="border-b border-border">
-				<div className="max-w-[80vw] mx-auto px-4 py-6 flex items-center gap-2">
+				<div className="md:max-w-[80vw] mx-auto px-4 py-6 flex items-center gap-2">
 					<Sparkles className="h-6 w-6 text-primary" />
 					<h1 className="text-xl font-semibold">Prompt Details</h1>
 				</div>
 			</header>
 
-			<main className="max-w-[80vw] mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+			<main className="md:max-w-[80vw] mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
 				<section className="lg:col-span-2">
 					<div className="rounded-xl border border-border bg-card overflow-hidden">
 						<div className="relative w-full h-72">

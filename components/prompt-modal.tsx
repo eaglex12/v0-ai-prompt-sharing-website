@@ -75,7 +75,7 @@ export default function PromptModal({
 	};
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-			<DialogContent className="sm:max-w-2xl">
+			<DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-auto">
 				<DialogHeader>
 					<DialogTitle>{selectedPrompt?.title}</DialogTitle>
 					<DialogDescription>{selectedPrompt?.description}</DialogDescription>
@@ -126,7 +126,7 @@ export default function PromptModal({
 					)}
 					{selectedPrompt?.slug && (
 						<Link href={`/p/${selectedPrompt.slug}`} prefetch>
-							<Button variant="secondary" size="sm">
+							<Button variant="secondary" size="sm" className="w-full">
 								Open details
 							</Button>
 						</Link>

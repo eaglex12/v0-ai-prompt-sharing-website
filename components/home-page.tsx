@@ -111,7 +111,7 @@ export function HomePage() {
 		<div className="min-h-screen bg-background">
 			{/* Top Nav */}
 			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
-				<div className={`max-w-[80vw] mx-auto px-4 py-4`}>
+				<div className={`md:max-w-[80vw] mx-auto px-4 py-4`}>
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-2">
 							<Sparkles className="h-7 w-7 text-primary" />
@@ -141,7 +141,7 @@ export function HomePage() {
 					<div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
 					<div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
 				</div>
-				<div className={`max-w-[60vw] mx-auto px-4 pt-12 pb-8`}>
+				<div className={`md:max-w-[60vw] mx-auto px-4 pt-12 pb-8`}>
 					<div className="text-center">
 						<div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs text-muted-foreground mb-4">
 							<Sparkles className="h-3.5 w-3.5 text-primary" />
@@ -154,22 +154,11 @@ export function HomePage() {
 							Explore what's hot across art, photography, and 3D. Copy a
 							prompt and start creating in seconds.
 						</p>
-						<div className="mt-6 md:mt-8 max-w-2xl mx-auto">
-							<div className="relative">
-								<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
-								<Input
-									placeholder="Try: cyberpunk portrait, product render, isometric room..."
-									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
-									className="h-12 md:h-14 pl-11 bg-card/80 border-border text-base"
-								/>
-							</div>
-						</div>
 					</div>
 				</div>
 			</section>
 
-			<div className={`max-w-[60vw] mx-auto px-4 py-8`}>
+			<div className={`md:max-w-[60vw] mx-auto px-4 py-8`}>
 				{/* Main Content */}
 				<div>
 					{/* Trending Section */}
@@ -229,6 +218,18 @@ export function HomePage() {
 								? "All Prompts"
 								: selectedCategory}
 						</h2>
+
+						<div className="my-4 md:my-8 max-w-2xl mx-auto">
+							<div className="relative">
+								<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
+								<Input
+									placeholder="Try: cyberpunk portrait, product render, isometric room..."
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+									className="h-12 md:h-14 pl-11 bg-card/80 border-border text-base"
+								/>
+							</div>
+						</div>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 							{prompts.map((prompt) => (
