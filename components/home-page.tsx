@@ -187,8 +187,10 @@ export function HomePage() {
 						</section>
 					)}
 
-					{/* Banner Ad */}
-					<EnhancedBannerAd adSlot="banner-ad-1" />
+					{/* Banner Ad: only show when there is meaningful content on screen */}
+					{trendingPrompts.length >= 3 && (
+						<EnhancedBannerAd adSlot="banner-ad-1" />
+					)}
 
 					{/* Category Filter */}
 					<div className="flex flex-wrap gap-2 mb-8">
@@ -253,15 +255,21 @@ export function HomePage() {
 							</div>
 						)}
 
-						{/* Bottom Banner Ad */}
-						<EnhancedBannerAd adSlot="banner-ad-2" />
+						{/* Bottom Banner Ad: only show when there is substantial list content */}
+						{prompts.length >= 3 && (
+							<EnhancedBannerAd adSlot="banner-ad-2" />
+						)}
 					</section>
 				</div>
 			</div>
 
-			{/* Sidebar Ads */}
-			<EnhancedSidebarAd position="left" />
-			<EnhancedSidebarAd position="right" />
+			{/* Sidebar Ads: only show when the page has enough content density */}
+			{(prompts.length >= 3 || trendingPrompts.length >= 3) && (
+				<>
+					<EnhancedSidebarAd position="left" />
+					<EnhancedSidebarAd position="right" />
+				</>
+			)}
 
 			{/* Prompt Detail Modal */}
 			<PromptModal
