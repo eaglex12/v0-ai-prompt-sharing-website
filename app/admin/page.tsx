@@ -1,18 +1,23 @@
 import { Suspense } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
 import { AdminStats } from "@/components/admin/admin-stats"
 import { PromptsManager } from "@/components/admin/prompts-manager"
 import { CategoriesManager } from "@/components/admin/categories-manager"
 import { AnalyticsView } from "@/components/admin/analytics-view"
+import { LogoutButton } from "@/components/admin/logout-button"
 
 export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Admin Dashboard</h1>
-          <p className="text-slate-600">Manage your AI prompts library and view analytics</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">Admin Dashboard</h1>
+            <p className="text-slate-600">Manage your AI prompts library and view analytics</p>
+          </div>
+          <LogoutButton />
         </div>
 
         <Suspense fallback={<div>Loading stats...</div>}>
