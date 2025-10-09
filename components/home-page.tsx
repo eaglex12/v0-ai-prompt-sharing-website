@@ -113,12 +113,12 @@ export function HomePage() {
 			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
 				<div className={`md:max-w-[80vw] mx-auto px-4 py-4`}>
 					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-2">
+						<a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
 							<Sparkles className="h-7 w-7 text-primary" />
 							<span className="text-xl font-heading font-bold text-foreground">
 								AI Prompts Hub
 							</span>
-						</div>
+						</a>
 						<div className="hidden md:block w-full max-w-lg ml-6">
 							<div className="relative">
 								<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -291,25 +291,25 @@ export function HomePage() {
 						</div>
 						<div className="flex gap-6 text-sm text-muted-foreground">
 							<a
-								href="#"
+								href="/about"
 								className="hover:text-foreground transition-colors"
 							>
 								About
 							</a>
 							<a
-								href="#"
+								href="/contact"
 								className="hover:text-foreground transition-colors"
 							>
 								Contact
 							</a>
 							<a
-								href="#"
+								href="/terms"
 								className="hover:text-foreground transition-colors"
 							>
 								Terms
 							</a>
 							<a
-								href="#"
+								href="/privacy"
 								className="hover:text-foreground transition-colors"
 							>
 								Privacy
