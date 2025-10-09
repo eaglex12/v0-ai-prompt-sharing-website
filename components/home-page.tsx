@@ -7,10 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useAnalytics } from "@/hooks/use-analytics";
 import type { Category, Prompt } from "@/lib/database/prompts-client";
 import {
-	getAllCategories,
-	getAllPrompts,
 	getPromptsByCategory,
-	getTrendingPrompts,
 	searchPrompts,
 } from "@/lib/database/prompts-client";
 import { Search, Sparkles, TrendingUp } from "lucide-react";
@@ -18,44 +15,27 @@ import { useEffect, useState } from "react";
 import PromptCard from "./prompt-card";
 import PromptModal from "./prompt-modal";
 
-export function HomePage() {
-	const [prompts, setPrompts] = useState<Prompt[]>([]);
-	const [trendingPrompts, setTrendingPrompts] = useState<Prompt[]>([]);
-	const [categories, setCategories] = useState<Category[]>([]);
+interface HomePageProps {
+	initialPrompts: Prompt[];
+	initialTrendingPrompts: Prompt[];
+	initialCategories: Category[];
+}
+
+export function HomePage({ initialPrompts, initialTrendingPrompts, initialCategories }: HomePageProps) {
+	const [prompts, setPrompts] = useState<Prompt[]>(initialPrompts);
+	const [trendingPrompts, setTrendingPrompts] = useState<Prompt[]>(initialTrendingPrompts);
+	const [categories, setCategories] = useState<Category[]>(initialCategories);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState("All");
 	const [copiedId, setCopiedId] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
 	const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	const { trackView } = useAnalytics();
 
 	useEffect(() => {
-		loadInitialData();
-	}, []);
-
-	useEffect(() => {
 		handleSearch();
 	}, [searchQuery, selectedCategory]);
-
-	const loadInitialData = async () => {
-		try {
-			const [allPrompts, trending, allCategories] = await Promise.all([
-				getAllPrompts(),
-				getTrendingPrompts(),
-				getAllCategories(),
-			]);
-
-			setPrompts(allPrompts);
-			setTrendingPrompts(trending);
-			setCategories(allCategories);
-		} catch (error) {
-			console.error("Error loading data:", error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
 
 	const handleSearch = async () => {
 		try {
@@ -64,13 +44,13 @@ export function HomePage() {
 			if (searchQuery.trim()) {
 				results = await searchPrompts(searchQuery);
 			} else if (selectedCategory === "All") {
-				results = await getAllPrompts();
+				results = initialPrompts;
 			} else {
 				const category = categories.find((cat) => cat.name === selectedCategory);
 				if (category) {
 					results = await getPromptsByCategory(category.slug);
 				} else {
-					results = await getAllPrompts();
+					results = initialPrompts;
 				}
 			}
 
@@ -93,17 +73,6 @@ export function HomePage() {
 	const handlePromptView = (promptId: string) => {
 		trackView(promptId);
 	};
-
-	if (isLoading) {
-		return (
-			<div className="min-h-screen bg-background flex items-center justify-center">
-				<div className="text-center">
-					<Sparkles className="h-12 w-12 text-primary mx-auto mb-4 animate-pulse" />
-					<p className="text-muted-foreground">Loading AI prompts...</p>
-				</div>
-			</div>
-		);
-	}
 
 	const categoryOptions = ["All", ...categories.map((cat) => cat.name)];
 
@@ -247,7 +216,7 @@ export function HomePage() {
 							))}
 						</div>
 
-						{prompts.length === 0 && !isLoading && (
+						{prompts.length === 0 && (
 							<div className="text-center py-12">
 								<p className="text-muted-foreground text-lg">
 									No prompts found matching your search.

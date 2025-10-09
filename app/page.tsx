@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { HomePage } from "@/components/home-page";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 import type { Metadata } from "next";
+import { getAllPrompts, getTrendingPrompts, getAllCategories } from "@/lib/database/prompts-server";
 
 export const metadata: Metadata = {
 	title: "AI Prompts Hub - Trending AI Prompts for ChatGPT, Midjourney, Gemini & More",
@@ -32,7 +33,14 @@ export const metadata: Metadata = {
 	},
 };
 
-export default function Page() {
+export default async function Page() {
+	// Fetch data on the server side for better performance
+	const [allPrompts, trendingPrompts, categories] = await Promise.all([
+		getAllPrompts(),
+		getTrendingPrompts(),
+		getAllCategories(),
+	]);
+
 	// Structured data for home page
 	const jsonLd = {
 		"@context": "https://schema.org",
@@ -60,9 +68,11 @@ export default function Page() {
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
 			<PageViewTracker />
-			<Suspense fallback={<div>Loading...</div>}>
-				<HomePage />
-			</Suspense>
+			<HomePage 
+				initialPrompts={allPrompts}
+				initialTrendingPrompts={trendingPrompts}
+				initialCategories={categories}
+			/>
 		</>
 	);
 }
