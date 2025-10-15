@@ -6,12 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAnalytics } from "@/hooks/use-analytics";
 import type { Category, Prompt } from "@/lib/database/prompts-client";
-import {
-	getPromptsByCategory,
-	searchPrompts,
-} from "@/lib/database/prompts-client";
-import { Search, Sparkles, TrendingUp } from "lucide-react";
+import { getPromptsByCategory, searchPrompts } from "@/lib/database/prompts-client";
+import { Search, Sparkles, TrendingUp, Grid3X3, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import PromptCard from "./prompt-card";
 import PromptModal from "./prompt-modal";
 
@@ -21,9 +19,14 @@ interface HomePageProps {
 	initialCategories: Category[];
 }
 
-export function HomePage({ initialPrompts, initialTrendingPrompts, initialCategories }: HomePageProps) {
+export function HomePage({
+	initialPrompts,
+	initialTrendingPrompts,
+	initialCategories,
+}: HomePageProps) {
 	const [prompts, setPrompts] = useState<Prompt[]>(initialPrompts);
-	const [trendingPrompts, setTrendingPrompts] = useState<Prompt[]>(initialTrendingPrompts);
+	const [trendingPrompts, setTrendingPrompts] =
+		useState<Prompt[]>(initialTrendingPrompts);
 	const [categories, setCategories] = useState<Category[]>(initialCategories);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState("All");
@@ -82,7 +85,10 @@ export function HomePage({ initialPrompts, initialTrendingPrompts, initialCatego
 			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
 				<div className={`md:max-w-[80vw] mx-auto px-4 py-4`}>
 					<div className="flex items-center justify-between">
-						<a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+						<a
+							href="/"
+							className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+						>
 							<Sparkles className="h-7 w-7 text-primary" />
 							<span className="text-xl font-heading font-bold text-foreground">
 								AI Prompts Hub
@@ -161,6 +167,64 @@ export function HomePage({ initialPrompts, initialTrendingPrompts, initialCatego
 						<EnhancedBannerAd adSlot="banner-ad-1" />
 					)}
 
+					{/* Categories Section */}
+					{categories.length > 0 && (
+						<section className="mb-12">
+							<div className="flex items-center justify-between mb-6">
+								<div className="flex items-center gap-2">
+									<Grid3X3 className="h-6 w-6 text-accent" />
+									<h2 className="text-3xl font-heading font-bold text-foreground">
+										Browse by Category
+									</h2>
+								</div>
+								<Link
+									href="/categories"
+									className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+								>
+									View all categories
+									<ArrowRight className="h-4 w-4" />
+								</Link>
+							</div>
+
+							<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+								{categories.slice(0, 8).map((category) => (
+									<Link
+										key={category.id}
+										href={`/category/${category.slug}`}
+										className="group relative overflow-hidden rounded-lg border border-border bg-card p-6 hover:bg-card/80 transition-all duration-200 hover:shadow-md"
+									>
+										<div className="flex flex-col items-center text-center space-y-3">
+											<div
+												className="h-12 w-12 rounded-full flex items-center justify-center"
+												style={{
+													backgroundColor:
+														category.color + "20",
+												}}
+											>
+												<div
+													className="h-6 w-6 rounded-full"
+													style={{
+														backgroundColor: category.color,
+													}}
+												/>
+											</div>
+											<div>
+												<h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+													{category.name}
+												</h3>
+												{category.description && (
+													<p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+														{category.description}
+													</p>
+												)}
+											</div>
+										</div>
+									</Link>
+								))}
+							</div>
+						</section>
+					)}
+
 					{/* Category Filter */}
 					<div className="flex flex-wrap gap-2 mb-8">
 						{categoryOptions.map((category) => (
@@ -225,9 +289,7 @@ export function HomePage({ initialPrompts, initialTrendingPrompts, initialCatego
 						)}
 
 						{/* Bottom Banner Ad: only show when there is substantial list content */}
-						{prompts.length >= 3 && (
-							<EnhancedBannerAd adSlot="banner-ad-2" />
-						)}
+						{prompts.length >= 3 && <EnhancedBannerAd adSlot="banner-ad-2" />}
 					</section>
 				</div>
 			</div>

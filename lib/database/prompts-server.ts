@@ -155,6 +155,23 @@ export async function getAllCategories(): Promise<Category[]> {
 	return data || [];
 }
 
+export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+	const supabase = await createClient();
+
+	const { data, error } = await supabase
+		.from("categories")
+		.select("*")
+		.eq("slug", slug)
+		.single();
+
+	if (error) {
+		console.error("Error fetching category by slug:", error);
+		return null;
+	}
+
+	return data as Category;
+}
+
 export async function searchPrompts(query: string): Promise<Prompt[]> {
 	const supabase = await createClient();
 

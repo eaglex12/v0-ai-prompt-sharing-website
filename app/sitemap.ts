@@ -5,11 +5,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://prompt.org.in";
 
 	// Get all prompts and categories from database using client-side Supabase
-	let prompts = [];
-	let categories = [];
+	let prompts: Array<{
+		slug: string;
+		updated_at: string;
+		is_trending: boolean;
+		is_featured: boolean;
+	}> = [];
+	let categories: Array<{ slug: string; created_at: string }> = [];
 	try {
 		const supabase = createClient();
-		
+
 		// Fetch prompts
 		const { data: promptsData, error: promptsError } = await supabase
 			.from("prompts")
@@ -97,6 +102,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			lastModified: new Date(),
 			changeFrequency: "monthly" as const,
 			priority: 0.7,
+		},
+		{
+			url: `${baseUrl}/categories`,
+			lastModified: new Date(),
+			changeFrequency: "weekly" as const,
+			priority: 0.9,
 		},
 	];
 
