@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { AdminStats } from "@/components/admin/admin-stats"
 import { PromptsManager } from "@/components/admin/prompts-manager"
 import { CategoriesManager } from "@/components/admin/categories-manager"
+import { BlogManager } from "@/components/admin/blog-manager"
+import { BlogCategoriesManager } from "@/components/admin/blog-categories-manager"
 import { AnalyticsView } from "@/components/admin/analytics-view"
 import { LogoutButton } from "@/components/admin/logout-button"
 
@@ -25,9 +27,11 @@ export default function AdminPage() {
         </Suspense>
 
         <Tabs defaultValue="prompts" className="mt-8">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="prompts">Prompts</TabsTrigger>
             <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="blog">Blog</TabsTrigger>
+            <TabsTrigger value="blog-categories">Blog Categories</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
@@ -55,6 +59,34 @@ export default function AdminPage() {
               <CardContent>
                 <Suspense fallback={<div>Loading categories...</div>}>
                   <CategoriesManager />
+                </Suspense>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="blog" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Manage Blog Posts</CardTitle>
+                <CardDescription>Create and manage blog posts</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Suspense fallback={<div>Loading blog posts...</div>}>
+                  <BlogManager />
+                </Suspense>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="blog-categories" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Manage Blog Categories</CardTitle>
+                <CardDescription>Organize blog posts into categories</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Suspense fallback={<div>Loading blog categories...</div>}>
+                  <BlogCategoriesManager />
                 </Suspense>
               </CardContent>
             </Card>

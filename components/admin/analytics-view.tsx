@@ -76,7 +76,12 @@ export function AnalyticsView() {
       const dateStr = date.toISOString().split("T")[0]
       const actions = recentData?.filter((item) => item.created_at.startsWith(dateStr)).length || 0
       return {
-        date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        date: (() => {
+          const year = date.getFullYear();
+          const month = date.getMonth() + 1;
+          const day = date.getDate();
+          return `${month}/${day}`;
+        })(),
         actions,
       }
     }).reverse()

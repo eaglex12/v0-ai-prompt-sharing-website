@@ -3,6 +3,7 @@ import { HomePage } from "@/components/home-page";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 import type { Metadata } from "next";
 import { getAllPrompts, getTrendingPrompts, getAllCategories } from "@/lib/database/prompts-server";
+import { getFeaturedBlogPosts } from "@/lib/database/blog";
 
 export const metadata: Metadata = {
 	title: "AI Prompts Hub - Trending AI Prompts for ChatGPT, Midjourney, Gemini & More",
@@ -35,10 +36,11 @@ export const metadata: Metadata = {
 
 export default async function Page() {
 	// Fetch data on the server side for better performance
-	const [allPrompts, trendingPrompts, categories] = await Promise.all([
+	const [allPrompts, trendingPrompts, categories, featuredBlogPosts] = await Promise.all([
 		getAllPrompts(),
 		getTrendingPrompts(),
 		getAllCategories(),
+		getFeaturedBlogPosts(),
 	]);
 
 	// Structured data for home page
@@ -72,6 +74,7 @@ export default async function Page() {
 				initialPrompts={allPrompts}
 				initialTrendingPrompts={trendingPrompts}
 				initialCategories={categories}
+				initialFeaturedBlogPosts={featuredBlogPosts}
 			/>
 		</>
 	);

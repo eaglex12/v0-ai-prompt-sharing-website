@@ -5,10 +5,13 @@ import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
 import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useAnalytics } from "@/hooks/use-analytics";
 import type { Category, Prompt } from "@/lib/database/prompts-client";
 import { getPromptsByCategory, searchPrompts } from "@/lib/database/prompts-client";
-import { Search, Sparkles, TrendingUp, Grid3X3, ArrowRight } from "lucide-react";
+import { getFeaturedBlogPosts } from "@/lib/database/blog-client";
+import { Search, Sparkles, TrendingUp, Grid3X3, ArrowRight, BookOpen, User, Calendar, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PromptCard from "./prompt-card";
@@ -18,12 +21,14 @@ interface HomePageProps {
 	initialPrompts: Prompt[];
 	initialTrendingPrompts: Prompt[];
 	initialCategories: Category[];
+	initialFeaturedBlogPosts?: any[];
 }
 
 export function HomePage({
 	initialPrompts,
 	initialTrendingPrompts,
 	initialCategories,
+	initialFeaturedBlogPosts = [],
 }: HomePageProps) {
 	const [prompts, setPrompts] = useState<Prompt[]>(initialPrompts);
 	const [trendingPrompts, setTrendingPrompts] =
@@ -95,6 +100,20 @@ export function HomePage({
 								AI Prompts Hub
 							</span>
 						</a>
+						<nav className="hidden md:flex gap-6">
+							<Link href="/" className="text-sm font-medium text-foreground">
+								Prompts
+							</Link>
+							<Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+								Blog
+							</Link>
+							<Link href="/categories" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+								Categories
+							</Link>
+							<Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+								About
+							</Link>
+						</nav>
 						<div className="hidden md:block w-full max-w-lg ml-6">
 							<div className="relative">
 								<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -221,6 +240,97 @@ export function HomePage({
 											</div>
 										</div>
 									</Link>
+								))}
+							</div>
+						</section>
+					)}
+
+					{/* Featured Blog Posts */}
+					{initialFeaturedBlogPosts.length > 0 && (
+						<section className="mb-12">
+							<div className="flex items-center justify-between mb-6">
+								<div className="flex items-center gap-2">
+									<BookOpen className="h-6 w-6 text-accent" />
+									<h2 className="text-3xl font-heading font-bold text-foreground">
+										Latest Blog Posts
+									</h2>
+								</div>
+								<Link
+									href="/blog"
+									className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+								>
+									View all posts
+									<ArrowRight className="h-4 w-4" />
+								</Link>
+							</div>
+
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+								{initialFeaturedBlogPosts.slice(0, 3).map((post) => (
+									<Card key={post.id} className="group hover:shadow-lg transition-shadow">
+										<CardHeader>
+											{post.featured_image_url && (
+												<div className="relative w-full h-48 rounded-lg overflow-hidden mb-4">
+													<Image
+														src={post.featured_image_url}
+														alt={post.title}
+														fill
+														className="object-cover group-hover:scale-105 transition-transform duration-300"
+													/>
+												</div>
+											)}
+											<div className="flex items-center gap-2 mb-2">
+												{post.blog_categories && (
+													<Badge
+														variant="secondary"
+														style={{
+															backgroundColor: post.blog_categories.color + "20",
+															color: post.blog_categories.color,
+														}}
+													>
+														{post.blog_categories.name}
+													</Badge>
+												)}
+												<Badge variant="default">Blog</Badge>
+											</div>
+											<CardTitle className="text-xl group-hover:text-primary transition-colors">
+												<Link href={`/blog/${post.slug}`}>
+													{post.title}
+												</Link>
+											</CardTitle>
+											<CardDescription className="line-clamp-3">
+												{post.excerpt}
+											</CardDescription>
+										</CardHeader>
+										<CardContent>
+											<div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+												<div className="flex items-center gap-1">
+													<User className="h-4 w-4" />
+													<span>{post.author_name}</span>
+												</div>
+												<div className="flex items-center gap-1">
+													<Calendar className="h-4 w-4" />
+													<span>{(() => {
+														const date = new Date(post.published_at || post.created_at);
+														const year = date.getFullYear();
+														const month = date.getMonth() + 1;
+														const day = date.getDate();
+														return `${month}/${day}/${year}`;
+													})()}</span>
+												</div>
+												<div className="flex items-center gap-1">
+													<Clock className="h-4 w-4" />
+													<span>{post.reading_time} min read</span>
+												</div>
+											</div>
+											<Link
+												href={`/blog/${post.slug}`}
+												className="inline-flex items-center gap-1 text-primary hover:text-primary/80 transition-colors"
+											>
+												Read more
+												<ArrowRight className="h-4 w-4" />
+											</Link>
+										</CardContent>
+									</Card>
 								))}
 							</div>
 						</section>

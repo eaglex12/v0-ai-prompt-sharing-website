@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://prompt.org.in";
 
-	// Get all prompts and categories from database using client-side Supabase
+	// Get all prompts, categories, and blog posts from database using client-side Supabase
 	let prompts: Array<{
 		slug: string;
 		updated_at: string;
@@ -12,6 +12,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		is_featured: boolean;
 	}> = [];
 	let categories: Array<{ slug: string; created_at: string }> = [];
+	let blogPosts: Array<{
+		slug: string;
+		updated_at: string;
+		is_featured: boolean;
+	}> = [];
 	try {
 		const supabase = createClient();
 
@@ -27,6 +32,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			.select("slug, created_at")
 			.order("name");
 
+		// Fetch blog posts
+		const { data: blogPostsData, error: blogPostsError } = await supabase
+			.from("blog_posts")
+			.select("slug, updated_at, is_featured")
+			.eq("status", "published")
+			.order("published_at", { ascending: false });
+
 		if (promptsError) {
 			console.error("Error fetching prompts for sitemap:", promptsError);
 		} else {
@@ -37,6 +49,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			console.error("Error fetching categories for sitemap:", categoriesError);
 		} else {
 			categories = categoriesData || [];
+		}
+
+		if (blogPostsError) {
+			console.error("Error fetching blog posts for sitemap:", blogPostsError);
+		} else {
+			blogPosts = blogPostsData || [];
 		}
 	} catch (error) {
 		console.error("Error fetching data for sitemap:", error);
@@ -57,6 +75,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		lastModified: new Date(category.created_at),
 		changeFrequency: "weekly" as const,
 		priority: 0.8,
+	}));
+
+	// Generate sitemap entries for blog posts
+	const blogPostUrls = blogPosts.map((post) => ({
+		url: `${baseUrl}/blog/${post.slug}`,
+		lastModified: new Date(post.updated_at),
+		changeFrequency: "weekly" as const,
+		priority: post.is_featured ? 0.8 : 0.6,
 	}));
 
 	// Static pages
@@ -111,5 +137,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		},
 	];
 
-	return [...staticPages, ...categoryUrls, ...promptUrls];
+	return [...staticPages, ...categoryUrls, ...promptUrls, ...blogPostUrls];
 }
