@@ -10,6 +10,9 @@ import Link from "next/link";
 import Image from "next/image";
 import type { BlogPost, BlogCategory } from "@/lib/database/blog-client";
 import { searchBlogPosts, getBlogPostsByCategory } from "@/lib/database/blog-client";
+import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
+import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
+import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
 
 interface BlogPageProps {
 	initialPosts: BlogPost[];
@@ -313,8 +316,34 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 							</p>
 						</div>
 					)}
+
+					{/* Banner Ad: only show when there are posts */}
+					{posts.length >= 3 && (
+						<EnhancedBannerAd 
+							adSlot="blog-page-banner" 
+							className="my-8"
+						/>
+					)}
+
+					{/* Bottom Ad: only show when there is substantial content */}
+					{posts.length >= 6 && (
+						<PolicyCompliantAd 
+							adSlot="blog-page-bottom" 
+							adFormat="auto"
+							minContentHeight={800}
+							position="bottom"
+						/>
+					)}
 				</section>
 			</div>
+
+			{/* Sidebar Ads: only show when there are enough posts */}
+			{posts.length >= 3 && (
+				<>
+					<EnhancedSidebarAd position="left" />
+					<EnhancedSidebarAd position="right" />
+				</>
+			)}
 
 			{/* Footer */}
 			<footer className="bg-card border-t border-border mt-16">

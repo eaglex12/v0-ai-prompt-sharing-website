@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Sparkles } from "lucide-react";
 import PromptActions from "@/components/prompt-actions";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
-import { DummyAd } from "@/components/ads/dummy-ad";
 import { AdSenseAd } from "@/components/ads/adsense-ad";
+import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
+import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
+import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
 
 type PageProps = {
 	params: { slug: string };
@@ -223,17 +225,23 @@ export default async function PromptPage({ params }: PageProps) {
 								/>
 							) : null}
 
-							{/* Ad after content */}
+							{/* Banner Ad after content */}
 							<div className="border-t border-border pt-6">
-								<AdSenseAd 
-									adSlot="content-ad-slot"
-									adFormat="auto"
-									adStyle={{ display: "block", width: "100%" }}
-									className="w-full"
+								<EnhancedBannerAd 
+									adSlot="prompt-view-banner" 
+									className="my-4"
 								/>
 							</div>
 						</div>
 					</div>
+
+					{/* Bottom Ad: only show when there is substantial content */}
+					<PolicyCompliantAd 
+						adSlot="prompt-view-bottom" 
+						adFormat="auto"
+						minContentHeight={800}
+						position="bottom"
+					/>
 				</section>
 
 				<aside className="space-y-4">
@@ -248,9 +256,22 @@ export default async function PromptPage({ params }: PageProps) {
 					</div>
 
 					{/* Sidebar Ad */}
-					<DummyAd variant="square" />
+					<AdSenseAd 
+						adSlot="prompt-view-sidebar"
+						adFormat="vertical"
+						adStyle={{ 
+							display: "block",
+							width: "100%",
+							height: "250px"
+						}}
+						className="w-full"
+					/>
 				</aside>
 			</main>
+
+			{/* Sidebar Ads: always show on prompt view pages */}
+			<EnhancedSidebarAd position="left" />
+			<EnhancedSidebarAd position="right" />
 		</div>
 	);
 }

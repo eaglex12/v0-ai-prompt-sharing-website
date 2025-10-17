@@ -9,6 +9,9 @@ import Link from "next/link";
 import Image from "next/image";
 import type { BlogPost, BlogCategory } from "@/lib/database/blog-client";
 import { incrementBlogPostViews } from "@/lib/database/blog-client";
+import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
+import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
+import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
 
 interface BlogPostPageProps {
 	post: BlogPost;
@@ -194,6 +197,12 @@ export function BlogPostPage({ post, relatedPosts, categories }: BlogPostPagePro
 					)}
 				</article>
 
+				{/* Banner Ad: after main content */}
+				<EnhancedBannerAd 
+					adSlot="blog-post-banner" 
+					className="my-8"
+				/>
+
 				{/* Related Posts */}
 				{relatedPosts.length > 0 && (
 					<section className="mb-12">
@@ -265,6 +274,14 @@ export function BlogPostPage({ post, relatedPosts, categories }: BlogPostPagePro
 					</section>
 				)}
 
+				{/* Bottom Ad: only show when there is substantial content */}
+				<PolicyCompliantAd 
+					adSlot="blog-post-bottom" 
+					adFormat="auto"
+					minContentHeight={1000}
+					position="bottom"
+				/>
+
 				{/* Back to Blog */}
 				<div className="text-center">
 					<Link href="/blog">
@@ -275,6 +292,10 @@ export function BlogPostPage({ post, relatedPosts, categories }: BlogPostPagePro
 					</Link>
 				</div>
 			</div>
+
+			{/* Sidebar Ads: always show on blog post pages */}
+			<EnhancedSidebarAd position="left" />
+			<EnhancedSidebarAd position="right" />
 
 			{/* Footer */}
 			<footer className="bg-card border-t border-border mt-16">

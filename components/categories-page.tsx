@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import type { Category } from "@/lib/database/prompts-client";
 import { ArrowLeft, Grid3X3, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
+import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
+import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
 
 interface CategoriesPageProps {
 	categories: Category[];
@@ -117,8 +120,34 @@ export function CategoriesPage({ categories }: CategoriesPageProps) {
 							</p>
 						</div>
 					)}
+
+					{/* Banner Ad: only show when there are categories */}
+					{categories.length >= 3 && (
+						<EnhancedBannerAd 
+							adSlot="categories-page-banner" 
+							className="my-8"
+						/>
+					)}
+
+					{/* Bottom Ad: only show when there is substantial content */}
+					{categories.length >= 6 && (
+						<PolicyCompliantAd 
+							adSlot="categories-page-bottom" 
+							adFormat="auto"
+							minContentHeight={800}
+							position="bottom"
+						/>
+					)}
 				</section>
 			</div>
+
+			{/* Sidebar Ads: only show when there are enough categories */}
+			{categories.length >= 3 && (
+				<>
+					<EnhancedSidebarAd position="left" />
+					<EnhancedSidebarAd position="right" />
+				</>
+			)}
 
 			{/* Footer */}
 			<footer className="bg-card border-t border-border mt-16">
