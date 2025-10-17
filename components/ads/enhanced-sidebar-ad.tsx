@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { AdSenseAd } from "./adsense-ad";
-import { DummyAd } from "./dummy-ad";
 
 interface EnhancedSidebarAdProps {
 	position: "left" | "right";
@@ -39,7 +38,7 @@ export function EnhancedSidebarAd({
 			className={`hidden lg:block fixed ${position}-4 top-1/2 transform -translate-y-1/2 w-32 h-96 ${className}`}
 		>
 			<div className="w-full h-full">
-				{/* Always show AdSense ad container */}
+				{/* Show AdSense ad only */}
 				<div
 					className={
 						showFallback || !isAdSenseLoaded
@@ -63,9 +62,11 @@ export function EnhancedSidebarAd({
 					</div>
 				</div>
 
-				{/* Show dummy ad as fallback */}
+				{/* Show placeholder when AdSense doesn't load */}
 				{(showFallback || !isAdSenseLoaded) && (
-					<DummyAd variant="sidebar" className="w-full h-full" />
+					<div className="w-full h-full bg-muted rounded-lg border border-border flex items-center justify-center">
+						<span className="text-muted-foreground text-xs">Advertisement</span>
+					</div>
 				)}
 			</div>
 		</div>

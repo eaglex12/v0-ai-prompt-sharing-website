@@ -7,6 +7,7 @@ import { Sparkles } from "lucide-react";
 import PromptActions from "@/components/prompt-actions";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 import { DummyAd } from "@/components/ads/dummy-ad";
+import { AdSenseAd } from "@/components/ads/adsense-ad";
 
 type PageProps = {
 	params: { slug: string };
@@ -224,7 +225,12 @@ export default async function PromptPage({ params }: PageProps) {
 
 							{/* Ad after content */}
 							<div className="border-t border-border pt-6">
-								<DummyAd variant="rectangle" />
+								<AdSenseAd 
+									adSlot="content-ad-slot"
+									adFormat="auto"
+									adStyle={{ display: "block", width: "100%" }}
+									className="w-full"
+								/>
 							</div>
 						</div>
 					</div>

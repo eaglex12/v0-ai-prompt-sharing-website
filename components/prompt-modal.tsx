@@ -16,7 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { InteractionTracker } from "@/components/analytics/interaction-tracker";
-import { DummyAd } from "@/components/ads/dummy-ad";
+import { AdSenseAd } from "@/components/ads/adsense-ad";
 
 export default function PromptModal({
 	isDialogOpen,
@@ -107,7 +107,12 @@ export default function PromptModal({
 
 					{/* Ad in modal */}
 					<div className="pt-4">
-						<DummyAd variant="banner" />
+						<AdSenseAd 
+							adSlot="modal-ad-slot"
+							adFormat="auto"
+							adStyle={{ display: "block", width: "100%" }}
+							className="w-full"
+						/>
 					</div>
 				</div>
 				<DialogFooter>

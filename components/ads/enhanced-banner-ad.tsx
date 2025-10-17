@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { AdSenseAd } from "./adsense-ad";
-import { DummyAd } from "./dummy-ad";
 
 interface EnhancedBannerAdProps {
 	className?: string;
@@ -37,7 +36,7 @@ export function EnhancedBannerAd({
 	return (
 		<div className={`w-full flex justify-center my-4 ${className}`}>
 			<div className="w-full max-w-4xl">
-				{/* Always show AdSense ad container */}
+				{/* Show AdSense ad only */}
 				<div className={showFallback || !isAdSenseLoaded ? "hidden" : "block"}>
 					<AdSenseAd
 						adSlot={adSlot}
@@ -51,9 +50,11 @@ export function EnhancedBannerAd({
 					/>
 				</div>
 
-				{/* Show dummy ad as fallback */}
+				{/* Show placeholder when AdSense doesn't load */}
 				{(showFallback || !isAdSenseLoaded) && (
-					<DummyAd variant="banner" className="w-full" />
+					<div className="w-full h-24 bg-muted rounded-lg border border-border flex items-center justify-center">
+						<span className="text-muted-foreground text-sm">Advertisement</span>
+					</div>
 				)}
 			</div>
 		</div>

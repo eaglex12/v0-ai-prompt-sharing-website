@@ -162,14 +162,14 @@ export default function PrivacyPage() {
 								<div>
 									<h4 className="font-medium mb-2">Automatically Collected Information</h4>
 									<p className="text-muted-foreground text-sm">
-										We automatically collect certain information when you use our service:
+										We collect minimal technical information server-side for basic functionality:
 									</p>
 									<ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4 mt-2">
-										<li>IP address and general location</li>
-										<li>Browser type and version</li>
-										<li>Device information</li>
-										<li>Usage patterns and analytics data</li>
-										<li>Cookies and similar technologies</li>
+										<li>IP address (for basic analytics and security)</li>
+										<li>Browser type and version (from user agent)</li>
+										<li>Device information (mobile/desktop)</li>
+										<li>Page views and interactions (server-side only)</li>
+										<li>No cookies or persistent tracking</li>
 									</ul>
 								</div>
 							</div>
@@ -219,26 +219,25 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								We use cookies and similar technologies to enhance your experience:
+								We do not use cookies or similar tracking technologies on our website. We collect minimal information server-side for basic functionality:
 							</p>
 							<div className="space-y-4">
 								<div>
-									<h4 className="font-medium mb-2">Essential Cookies</h4>
+									<h4 className="font-medium mb-2">No Essential Cookies</h4>
 									<p className="text-sm text-muted-foreground">
-										These cookies are necessary for the website to function properly and cannot be disabled.
+										We do not use essential cookies. Our website functions without requiring any cookies.
 									</p>
 								</div>
 								<div>
-									<h4 className="font-medium mb-2">Analytics Cookies</h4>
+									<h4 className="font-medium mb-2">No Analytics Cookies</h4>
 									<p className="text-sm text-muted-foreground">
-										We use analytics tools to understand how visitors interact with our website. 
-										You can opt-out of analytics tracking.
+										We do not use analytics cookies or tracking cookies. We collect basic usage statistics server-side without storing any cookies on your device.
 									</p>
 								</div>
 								<div>
 									<h4 className="font-medium mb-2">Advertising Cookies</h4>
 									<p className="text-sm text-muted-foreground">
-										We may use advertising cookies to show relevant ads. You can manage these preferences in your browser settings.
+										We use Google AdSense to display relevant advertisements. Google may use cookies, web beacons, and similar technologies to collect information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you. You can opt-out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Google Ad Settings</a> or <a href="https://www.aboutads.info/choices/" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Digital Advertising Alliance</a>.
 									</p>
 								</div>
 							</div>
@@ -279,21 +278,19 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								We may use third-party services that collect information about you:
+								We use minimal third-party services:
 							</p>
 							<div className="space-y-3">
 								<div>
 									<h4 className="font-medium">Analytics Services</h4>
 									<p className="text-sm text-muted-foreground">
-										We use analytics services like Google Analytics to understand website usage. 
-										These services may collect information about your visits to our website.
+										We do not use third-party analytics services like Google Analytics. We collect basic usage statistics server-side without any tracking cookies or personal data collection.
 									</p>
 								</div>
 								<div>
 									<h4 className="font-medium">Advertising Services</h4>
 									<p className="text-sm text-muted-foreground">
-										We may use advertising services like Google AdSense to display relevant advertisements. 
-										These services may use cookies and similar technologies.
+										We use Google AdSense to display relevant advertisements. Google may use cookies, web beacons, and similar technologies to collect information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you. For more information about how Google uses data when you use our site, visit <a href="https://policies.google.com/technologies/partner-sites" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">How Google uses data when you use our partners' sites or apps</a>.
 									</p>
 								</div>
 								<div>

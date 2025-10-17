@@ -2,6 +2,7 @@
 
 import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
 import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
+import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAnalytics } from "@/hooks/use-analytics";
@@ -289,7 +290,14 @@ export function HomePage({
 						)}
 
 						{/* Bottom Banner Ad: only show when there is substantial list content */}
-						{prompts.length >= 3 && <EnhancedBannerAd adSlot="banner-ad-2" />}
+						{prompts.length >= 3 && (
+							<PolicyCompliantAd 
+								adSlot="banner-ad-2" 
+								adFormat="auto"
+								minContentHeight={800}
+								position="bottom"
+							/>
+						)}
 					</section>
 				</div>
 			</div>
