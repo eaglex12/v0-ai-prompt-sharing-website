@@ -3,13 +3,14 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getPromptBySlug } from "@/lib/database/prompts";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ArrowLeft } from "lucide-react";
 import PromptActions from "@/components/prompt-actions";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 import { AdSenseAd } from "@/components/ads/adsense-ad";
 import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
 import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
 import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
+import BackButton from "@/components/back-button";
 
 type PageProps = {
 	params: { slug: string };
@@ -150,9 +151,12 @@ export default async function PromptPage({ params }: PageProps) {
 			/>
 			<PageViewTracker promptId={prompt.id} />
 			<header className="border-b border-border">
-				<div className="md:max-w-[80vw] mx-auto px-4 py-6 flex items-center gap-2">
-					<Sparkles className="h-6 w-6 text-primary" />
-					<h1 className="text-xl font-semibold">Prompt Details</h1>
+				<div className="md:max-w-[80vw] mx-auto px-4 py-6 flex items-center justify-between">
+					<div className="flex items-center gap-2">
+						<Sparkles className="h-6 w-6 text-primary" />
+						<h1 className="text-xl font-semibold">Prompt Details</h1>
+					</div>
+					<BackButton />
 				</div>
 			</header>
 
