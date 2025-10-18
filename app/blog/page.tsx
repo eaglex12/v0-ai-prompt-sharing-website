@@ -63,7 +63,7 @@ export default async function Page() {
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
-			<Suspense fallback={<div>Loading blog...</div>}>
+			<Suspense fallback={null}>
 				<BlogPage 
 					initialPosts={blogPosts}
 					initialCategories={blogCategories}
