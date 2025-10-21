@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Copy, Share2 } from "lucide-react";
+import { Copy, Share2, X } from "lucide-react";
 import { Prompt } from "@/lib/database/prompts-client";
 import Image from "next/image";
 import Link from "next/link";
@@ -75,13 +75,25 @@ export default function PromptModal({
 	};
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-			<DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-auto">
-				<DialogHeader>
-					<DialogTitle>{selectedPrompt?.title}</DialogTitle>
-					<DialogDescription>{selectedPrompt?.description}</DialogDescription>
+			<DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-auto mx-4 sm:mx-0">
+				<DialogHeader className="space-y-3">
+					<div className="flex items-start justify-between">
+						<div className="flex-1 min-w-0">
+							<DialogTitle className="text-lg sm:text-xl leading-tight">{selectedPrompt?.title}</DialogTitle>
+							<DialogDescription className="text-sm sm:text-base mt-1">{selectedPrompt?.description}</DialogDescription>
+						</div>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={() => setIsDialogOpen(false)}
+							className="ml-2 flex-shrink-0 h-8 w-8 p-0"
+						>
+							<X className="h-4 w-4" />
+						</Button>
+					</div>
 				</DialogHeader>
 				<div className="grid gap-4">
-					<div className="relative w-full h-60 overflow-hidden rounded-md border">
+					<div className="relative w-full h-48 sm:h-60 overflow-hidden rounded-md border">
 						{selectedPrompt && (
 							<Image
 								src={
@@ -101,7 +113,7 @@ export default function PromptModal({
 							</Badge>
 						))}
 					</div>
-					<div className="rounded-md border bg-muted/60 p-3 max-h-48 overflow-auto text-xs text-muted-foreground">
+					<div className="rounded-md border bg-muted/60 p-3 max-h-48 overflow-auto text-xs sm:text-sm text-muted-foreground">
 						{selectedPrompt?.content}
 					</div>
 
@@ -115,14 +127,14 @@ export default function PromptModal({
 						/>
 					</div>
 				</div>
-				<DialogFooter>
+				<DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
 					{selectedPrompt && (
 						<InteractionTracker promptId={selectedPrompt.id} action="copy">
 							<Button
 								onClick={() =>
 									handleCopy(selectedPrompt.content, selectedPrompt.id)
 								}
-								className="bg-primary hover:bg-primary/90"
+								className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
 								size="sm"
 							>
 								<Copy className="h-4 w-4 mr-2" /> Copy prompt
@@ -130,7 +142,7 @@ export default function PromptModal({
 						</InteractionTracker>
 					)}
 					{selectedPrompt?.slug && (
-						<Link href={`/p/${selectedPrompt.slug}`} prefetch>
+						<Link href={`/p/${selectedPrompt.slug}`} prefetch className="w-full sm:w-auto">
 							<Button variant="secondary" size="sm" className="w-full">
 								Open details
 							</Button>
@@ -143,6 +155,7 @@ export default function PromptModal({
 								size="sm"
 								onClick={handleShare}
 								disabled={isSharing}
+								className="w-full sm:w-auto"
 							>
 								<Share2 className="h-4 w-4 mr-2" />
 								{isSharing ? "Sharing..." : "Share"}

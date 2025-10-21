@@ -12,6 +12,7 @@ import { incrementBlogPostViews } from "@/lib/database/blog-client";
 import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
 import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
 import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
+import BackButton from "@/components/back-button";
 
 interface BlogPostPageProps {
 	post: BlogPost;
@@ -67,15 +68,17 @@ export function BlogPostPage({ post, relatedPosts, categories }: BlogPostPagePro
 			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
 				<div className="max-w-7xl mx-auto px-4 py-4">
 					<div className="flex items-center justify-between">
-						<Link
-							href="/"
-							className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-						>
-							<ArrowLeft className="h-7 w-7 text-primary" />
-							<span className="text-xl font-heading font-bold text-foreground">
-								AI Prompts Hub
-							</span>
-						</Link>
+						<div className="flex items-center gap-2 sm:gap-4">
+							<BackButton />
+							<Link
+								href="/"
+								className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+							>
+								<span className="text-lg sm:text-xl font-heading font-bold text-foreground">
+									AI Prompts Hub
+								</span>
+							</Link>
+						</div>
 						<nav className="hidden md:flex gap-6">
 							<Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
 								Prompts

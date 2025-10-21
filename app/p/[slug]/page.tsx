@@ -151,10 +151,10 @@ export default async function PromptPage({ params }: PageProps) {
 			/>
 			<PageViewTracker promptId={prompt.id} />
 			<header className="border-b border-border">
-				<div className="md:max-w-[80vw] mx-auto px-4 py-6 flex items-center justify-between">
-					<div className="flex items-center gap-2">
-						<Sparkles className="h-6 w-6 text-primary" />
-						<h1 className="text-xl font-semibold">Prompt Details</h1>
+				<div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 flex items-center justify-between">
+					<div className="flex items-center gap-2 min-w-0 flex-1">
+						<Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
+						<h1 className="text-lg sm:text-xl font-semibold truncate">Prompt Details</h1>
 					</div>
 					<BackButton />
 				</div>
