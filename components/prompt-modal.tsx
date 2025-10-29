@@ -30,6 +30,17 @@ export default function PromptModal({
 	handleCopy: (content: string, id: string) => void;
 }) {
 	const [isSharing, setIsSharing] = useState(false);
+	const [copiedId, setCopiedId] = useState<string | null>(null);
+
+	const handleModalCopy = async (content: string, id: string) => {
+		try {
+			await navigator.clipboard.writeText(content);
+			setCopiedId(id);
+			setTimeout(() => setCopiedId(null), 2000);
+		} catch (err) {
+			console.error("Failed to copy text: ", err);
+		}
+	};
 
 	const handleShare = async () => {
 		if (!selectedPrompt) return;
@@ -141,12 +152,13 @@ export default function PromptModal({
 							<InteractionTracker promptId={selectedPrompt.id} action="copy">
 								<Button
 									onClick={() =>
-										handleCopy(selectedPrompt.content, selectedPrompt.id)
+										handleModalCopy(selectedPrompt.content, selectedPrompt.id)
 									}
 									className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
 									size="sm"
 								>
-									<Copy className="h-4 w-4 mr-2" /> Copy prompt
+									<Copy className="h-4 w-4 mr-2" />
+									{copiedId === selectedPrompt.id ? "Copied!" : "Copy prompt"}
 								</Button>
 							</InteractionTracker>
 						)}

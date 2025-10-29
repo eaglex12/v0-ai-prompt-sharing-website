@@ -163,52 +163,80 @@ export default async function PromptPage({ params }: PageProps) {
 			<main className="md:max-w-[80vw] mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
 				<section className="lg:col-span-2">
 					<div className="rounded-xl border border-border bg-card overflow-hidden">
-						<div className="relative w-full h-72">
-							<Image
-								src={prompt.reference_image_url || "/placeholder.svg"}
-								alt={prompt.title}
-								fill
-								className="object-cover"
-							/>
-						</div>
-						<div className="p-6 space-y-4">
-							<div className="flex items-center justify-between gap-4">
-								<h2 className="text-2xl font-bold text-card-foreground">
-									{prompt.title}
-								</h2>
-								{prompt.categories && (
-									<Badge
-										variant="secondary"
-										className="text-xs"
-										style={{
-											backgroundColor:
-												prompt.categories.color + "20",
-											color: prompt.categories.color,
-										}}
-									>
-										{prompt.categories.name}
-									</Badge>
-								)}
+						{prompt.reference_image_url && (
+							<div className="relative w-full aspect-video sm:aspect-[16/9] md:h-[500px] lg:h-[600px] bg-muted/20">
+								<Image
+									src={prompt.reference_image_url}
+									alt={prompt.title}
+									fill
+									className="object-contain"
+									priority
+								/>
 							</div>
-							{prompt.description && (
-								<p className="text-muted-foreground">
-									{prompt.description}
-								</p>
-							)}
-							<div className="rounded-lg bg-muted p-3 text-sm text-muted-foreground whitespace-pre-wrap">
-								{prompt.content}
-							</div>
-							{prompt.tags?.length ? (
-								<div className="flex flex-wrap gap-2">
-									{prompt.tags.map((t) => (
+						)}
+						<div className="p-6 space-y-6">
+							{/* Title Section */}
+							<div>
+								
+								<div className="flex items-center justify-between gap-4">
+									<h2 className="text-2xl font-bold text-card-foreground">
+										{prompt.title}
+									</h2>
+									{prompt.categories && (
 										<Badge
-											key={t}
-											variant="outline"
+											variant="secondary"
 											className="text-xs"
+											style={{
+												backgroundColor:
+													prompt.categories.color + "20",
+												color: prompt.categories.color,
+											}}
 										>
-											{t}
+											{prompt.categories.name}
 										</Badge>
-									))}
+									)}
+								</div>
+							</div>
+
+							{/* Description Section */}
+							{prompt.description && (
+								<div>
+									<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+										Description
+									</h3>
+									<p className="text-muted-foreground">
+										{prompt.description}
+									</p>
+								</div>
+							)}
+
+							{/* Prompt Content Section */}
+							<div>
+								<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+									Prompt
+								</h3>
+								<div className="rounded-lg bg-muted p-3 sm:p-4 text-sm sm:text-base text-muted-foreground whitespace-pre-wrap break-words max-h-[400px] sm:max-h-[500px] overflow-y-auto">
+									{prompt.content}
+								</div>
+							</div>
+
+							{/* Tags Section */}
+							{prompt.tags?.length ? (
+								<div>
+									<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+										Tags
+									</h3>
+									<div className="flex flex-wrap gap-2">
+										{prompt.tags.map((t) => (
+											<Badge
+												key={t}
+												variant="outline"
+												className="text-xs"
+											>
+												{t}
+											</Badge>
+										))}
+									</div>
 								</div>
 							) : null}
 							<PromptActions
