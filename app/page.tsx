@@ -6,9 +6,9 @@ import { getAllPrompts, getTrendingPrompts, getAllCategories } from "@/lib/datab
 import { getFeaturedBlogPosts } from "@/lib/database/blog";
 
 export const metadata: Metadata = {
-	title: "AI Prompts Hub - Trending AI Prompts for ChatGPT, Midjourney, Gemini & More",
+	title: "AI Prompts Hub - ChatGPT, Midjourney & Gemini Prompts",
 	description:
-		"Discover the best trending AI prompts for ChatGPT, Midjourney, DALL-E, Gemini, Stable Diffusion and other AI tools. Browse thousands of creative AI prompts for art generation, 3D modeling, photography, writing, productivity and more. Free AI prompt library.",
+		"Browse trending AI prompts for ChatGPT, Midjourney, DALL-E, Gemini & Stable Diffusion. Thousands of creative prompts for art, 3D modeling & more. Free library.",
 	keywords: [
 		"trending AI",
 		"AI prompts",
