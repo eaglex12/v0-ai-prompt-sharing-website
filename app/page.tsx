@@ -32,6 +32,9 @@ export const metadata: Metadata = {
 			"Discover the best trending AI prompts for ChatGPT, Midjourney, Gemini, DALL-E and more. Free prompt library with thousands of creative prompts.",
 		type: "website",
 	},
+	alternates: {
+		canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://prompt.org.in",
+	},
 };
 
 export default async function Page() {
