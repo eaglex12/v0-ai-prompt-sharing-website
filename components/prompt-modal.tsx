@@ -75,93 +75,103 @@ export default function PromptModal({
 	};
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-			<DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-auto mx-4 sm:mx-0">
-				<DialogHeader className="space-y-3">
-					<div className="flex items-start justify-between">
+			<DialogContent showCloseButton={false} className="sm:max-w-2xl h-[85vh] sm:h-[80vh] flex flex-col mx-4 sm:mx-0 p-0 gap-0 overflow-hidden">
+				{/* Header - Fixed */}
+				<DialogHeader className="p-6 pb-4 flex-shrink-0 border-b">
+					<div className="flex items-start justify-between gap-4">
 						<div className="flex-1 min-w-0">
-							<DialogTitle className="text-lg sm:text-xl leading-tight">{selectedPrompt?.title}</DialogTitle>
-							<DialogDescription className="text-sm sm:text-base mt-1">{selectedPrompt?.description}</DialogDescription>
+							<DialogTitle className="text-lg sm:text-xl leading-tight pr-2">
+								{selectedPrompt?.title}
+							</DialogTitle>
+							{selectedPrompt?.description && (
+								<DialogDescription className="text-sm sm:text-base mt-2">
+									{selectedPrompt.description}
+								</DialogDescription>
+							)}
 						</div>
 						<Button
 							variant="ghost"
 							size="sm"
 							onClick={() => setIsDialogOpen(false)}
-							className="ml-2 flex-shrink-0 h-8 w-8 p-0"
+							className="flex-shrink-0 h-8 w-8 p-0 -mt-1 -mr-1"
 						>
 							<X className="h-4 w-4" />
 						</Button>
 					</div>
 				</DialogHeader>
-				<div className="grid gap-4">
-					<div className="relative w-full h-48 sm:h-60 overflow-hidden rounded-md border">
-						{selectedPrompt && (
+
+				{/* Image - Fixed */}
+				{selectedPrompt?.reference_image_url && (
+					<div className="px-6 py-4 flex-shrink-0">
+						<div className="relative w-full h-64 sm:h-80 overflow-hidden rounded-md border bg-muted/20">
 							<Image
-								src={
-									selectedPrompt.reference_image_url ||
-									"/placeholder.svg"
-								}
+								src={selectedPrompt.reference_image_url || "/placeholder.svg"}
 								alt={selectedPrompt.title}
 								fill
-								className="object-cover"
+								className="object-contain"
 							/>
-						)}
+						</div>
 					</div>
-					<div className="flex flex-wrap gap-2">
-						{selectedPrompt?.tags?.map((t) => (
-							<Badge key={t} variant="outline" className="text-xs">
-								{t}
-							</Badge>
-						))}
+				)}
+
+				{/* Tags - Fixed */}
+				{selectedPrompt?.tags && selectedPrompt.tags.length > 0 && (
+					<div className="px-6 pb-4 flex-shrink-0">
+						<div className="flex flex-wrap gap-2">
+							{selectedPrompt.tags.map((t) => (
+								<Badge key={t} variant="outline" className="text-xs">
+									{t}
+								</Badge>
+							))}
+						</div>
 					</div>
-					<div className="rounded-md border bg-muted/60 p-3 max-h-48 overflow-auto text-xs sm:text-sm text-muted-foreground">
+				)}
+
+				{/* Paragraph Content - Scrollable */}
+				<div className="flex-1 min-h-0 px-6 pb-4 overflow-hidden">
+					<div className="h-full rounded-md border bg-muted/60 p-4 text-sm sm:text-base text-muted-foreground whitespace-pre-wrap break-words overflow-y-auto">
 						{selectedPrompt?.content}
 					</div>
-
-					{/* Ad in modal */}
-					<div className="pt-4">
-						<AdSenseAd 
-							adSlot="modal-ad-slot"
-							adFormat="auto"
-							adStyle={{ display: "block", width: "100%" }}
-							className="w-full"
-						/>
-					</div>
 				</div>
-				<DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
-					{selectedPrompt && (
-						<InteractionTracker promptId={selectedPrompt.id} action="copy">
-							<Button
-								onClick={() =>
-									handleCopy(selectedPrompt.content, selectedPrompt.id)
-								}
-								className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
-								size="sm"
-							>
-								<Copy className="h-4 w-4 mr-2" /> Copy prompt
-							</Button>
-						</InteractionTracker>
-					)}
-					{selectedPrompt?.slug && (
-						<Link href={`/p/${selectedPrompt.slug}`} prefetch className="w-full sm:w-auto">
-							<Button variant="secondary" size="sm" className="w-full">
-								Open details
-							</Button>
-						</Link>
-					)}
-					{selectedPrompt && (
-						<InteractionTracker promptId={selectedPrompt.id} action="share">
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={handleShare}
-								disabled={isSharing}
-								className="w-full sm:w-auto"
-							>
-								<Share2 className="h-4 w-4 mr-2" />
-								{isSharing ? "Sharing..." : "Share"}
-							</Button>
-						</InteractionTracker>
-					)}
+
+				{/* Footer - Fixed */}
+				<DialogFooter className="p-6 pt-4 flex-shrink-0 border-t">
+					<div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:ml-auto">
+						{selectedPrompt && (
+							<InteractionTracker promptId={selectedPrompt.id} action="copy">
+								<Button
+									onClick={() =>
+										handleCopy(selectedPrompt.content, selectedPrompt.id)
+									}
+									className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
+									size="sm"
+								>
+									<Copy className="h-4 w-4 mr-2" /> Copy prompt
+								</Button>
+							</InteractionTracker>
+						)}
+						{selectedPrompt?.slug && (
+							<Link href={`/p/${selectedPrompt.slug}`} prefetch className="w-full sm:w-auto">
+								<Button variant="secondary" size="sm" className="w-full">
+									Open details
+								</Button>
+							</Link>
+						)}
+						{selectedPrompt && (
+							<InteractionTracker promptId={selectedPrompt.id} action="share">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={handleShare}
+									disabled={isSharing}
+									className="w-full sm:w-auto"
+								>
+									<Share2 className="h-4 w-4 mr-2" />
+									{isSharing ? "Sharing..." : "Share"}
+								</Button>
+							</InteractionTracker>
+						)}
+					</div>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
