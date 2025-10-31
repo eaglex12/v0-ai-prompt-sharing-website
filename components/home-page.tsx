@@ -141,7 +141,7 @@ export function HomePage({
           <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-accent/10 blur-3xl animate-pulse animation-delay-2000" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
         </div>
-        <div className={`md:max-w-[60vw] mx-auto px-4 pt-16 pb-12`}>
+        <div className={`md:max-w-[60vw] mx-auto px-4 pt-16 pb-8`}>
           <div className="text-center space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/30 px-4 py-2 text-xs text-muted-foreground backdrop-blur-md hover:border-border/80 transition-all duration-300 cursor-pointer">
               <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
@@ -163,10 +163,12 @@ export function HomePage({
         </div>
       </section>
 
-      <div className={`md:max-w-[60vw] mx-auto px-4 py-12`}>
-        {/* Main Content */}
+      <div className={`md:max-w-[60vw] mx-auto px-4 py-8`}>
+        {/* Main Content - Reorganized for Maximum Engagement */}
         <div>
-          {/* Trending Section */}
+          
+
+          {/* 2. Trending Section - Social Proof & FOMO */}
           {trendingPrompts.length > 0 && (
             <section className="mb-16">
               <div className="flex items-center gap-3 mb-8">
@@ -195,7 +197,76 @@ export function HomePage({
             </section>
           )}
 
-          {/* Categories Section */}
+          {/* Search & Filter Section - Immediate Interaction (moved below Trending) */}
+          <section className="mb-12">
+            <div className="mb-6">
+              <div className="relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-primary transition-colors duration-200" />
+                <Input
+                  placeholder="Try: cyberpunk portrait, product render, isometric room..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-14 pl-12 bg-card/50 border-border/50 hover:border-border focus:border-primary text-base backdrop-blur-sm transition-all duration-200"
+                />
+              </div>
+            </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap gap-2">
+              {categoryOptions.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className={`rounded-full transition-all duration-200 ${
+                    selectedCategory === category
+                      ? "bg-gradient-to-r from-primary to-accent shadow-lg"
+                      : "bg-card/50 border-border/50 hover:border-border hover:bg-card/60"
+                  }`}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
+          </section>
+
+          {/* 3. All Prompts Grid - Main Content */}
+          <section className="mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">
+              {selectedCategory === "All" ? "All Prompts" : selectedCategory}
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {prompts.map((prompt) => (
+                <PromptCard
+                  key={prompt.id}
+                  prompt={prompt}
+                  handlePromptView={handlePromptView}
+                  handleCopy={handleCopy}
+                  copiedId={copiedId}
+                  setSelectedPrompt={setSelectedPrompt}
+                  setIsDialogOpen={setIsDialogOpen}
+                />
+              ))}
+            </div>
+
+            {prompts.length === 0 && (
+              <div className="text-center py-16">
+                <Sparkles className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+                <p className="text-muted-foreground text-lg">No prompts found matching your search.</p>
+                <p className="text-muted-foreground/60 text-sm mt-2">Try different keywords or explore categories</p>
+              </div>
+            )}
+
+            {prompts.length >= 3 && (
+              <div className="mt-12">
+                <PolicyCompliantAd adSlot="banner-ad-2" adFormat="auto" minContentHeight={800} position="bottom" />
+              </div>
+            )}
+          </section>
+
+          {/* 4. Categories Section - Discovery & Exploration */}
           {categories.length > 0 && (
             <section className="mb-16">
               <div className="flex items-center justify-between mb-8">
@@ -253,7 +324,7 @@ export function HomePage({
             </section>
           )}
 
-          {/* Featured Blog Posts */}
+          {/* 5. Featured Blog Posts - Additional Value Content */}
           {initialFeaturedBlogPosts.length > 0 && (
             <section className="mb-16">
               <div className="flex items-center justify-between mb-8">
@@ -338,74 +409,6 @@ export function HomePage({
               </div>
             </section>
           )}
-
-          <section className="mb-16">
-            <div className="mb-8">
-              <div className="relative group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5 group-focus-within:text-primary transition-colors duration-200" />
-                <Input
-                  placeholder="Try: cyberpunk portrait, product render, isometric room..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-14 pl-12 bg-card/50 border-border/50 hover:border-border focus:border-primary text-base backdrop-blur-sm transition-all duration-200"
-                />
-              </div>
-            </div>
-
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap gap-2">
-              {categoryOptions.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className={`rounded-full transition-all duration-200 ${
-                    selectedCategory === category
-                      ? "bg-gradient-to-r from-primary to-accent shadow-lg"
-                      : "bg-card/50 border-border/50 hover:border-border hover:bg-card/60"
-                  }`}
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
-          </section>
-
-          {/* All Prompts Grid */}
-          <section>
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">
-              {selectedCategory === "All" ? "All Prompts" : selectedCategory}
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {prompts.map((prompt) => (
-                <PromptCard
-                  key={prompt.id}
-                  prompt={prompt}
-                  handlePromptView={handlePromptView}
-                  handleCopy={handleCopy}
-                  copiedId={copiedId}
-                  setSelectedPrompt={setSelectedPrompt}
-                  setIsDialogOpen={setIsDialogOpen}
-                />
-              ))}
-            </div>
-
-            {prompts.length === 0 && (
-              <div className="text-center py-16">
-                <Sparkles className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
-                <p className="text-muted-foreground text-lg">No prompts found matching your search.</p>
-                <p className="text-muted-foreground/60 text-sm mt-2">Try different keywords or explore categories</p>
-              </div>
-            )}
-
-            {prompts.length >= 3 && (
-              <div className="mt-12">
-                <PolicyCompliantAd adSlot="banner-ad-2" adFormat="auto" minContentHeight={800} position="bottom" />
-              </div>
-            )}
-          </section>
         </div>
       </div>
 
