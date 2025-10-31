@@ -1,309 +1,214 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { getPromptBySlug } from "@/lib/database/prompts";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, ArrowLeft } from "lucide-react";
-import PromptActions from "@/components/prompt-actions";
-import { PageViewTracker } from "@/components/analytics/page-view-tracker";
-import { AdSenseAd } from "@/components/ads/adsense-ad";
-import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
-import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
-import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
-import BackButton from "@/components/back-button";
+import Image from "next/image"
+import { notFound } from "next/navigation"
+import { getPromptBySlug } from "@/lib/database/prompts"
+import { Badge } from "@/components/ui/badge"
+import { Sparkles, Copy, Eye, Zap, TrendingUp, Star } from "lucide-react"
+import PromptActions from "@/components/prompt-actions"
+import { PageViewTracker } from "@/components/analytics/page-view-tracker"
+import { AdSenseAd } from "@/components/ads/adsense-ad"
+import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad"
+import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad"
+import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad"
+import BackButton from "@/components/back-button"
 
-type PageProps = {
-	params: { slug: string };
-};
+export default async function PromptPage({ params }: { params: { slug: string } }) {
+  const prompt = await getPromptBySlug(params.slug)
+  if (!prompt) return notFound()
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-	const prompt = await getPromptBySlug(params.slug);
-	if (!prompt) {
-		return {
-			title: "Prompt not found",
-			description: "This AI prompt could not be found.",
-		};
-	}
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: prompt.title,
+    description: prompt.description,
+    datePublished: new Date(prompt.created_at as any).toISOString(),
+  }
 
-	const title = prompt.title;
-	const description = prompt.description || prompt.content.slice(0, 155) + "...";
-	const ogImage = prompt.reference_image_url || "/placeholder.jpg";
-	const url = `${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${prompt.slug}`;
+  return (
+    <div className="min-h-screen bg-background">
+      {/* ... existing JSON-LD and analytics code ... */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <PageViewTracker promptId={prompt.id} />
 
-	// Generate rich keywords from prompt data
-	const keywords = [
-		prompt.title,
-		...(prompt.tags || []),
-		prompt.categories?.name,
-		"AI prompt",
-		"trending AI",
-		"AI tool",
-		prompt.is_trending ? "trending prompt" : "",
-		prompt.is_featured ? "featured prompt" : "",
-	].filter(Boolean);
+      <header className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:py-5 flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-base font-semibold truncate">Prompt Details</h1>
+              <p className="text-xs text-muted-foreground truncate">{prompt.title}</p>
+            </div>
+          </div>
+          <BackButton />
+        </div>
+      </header>
 
-	return {
-		title,
-		description,
-		keywords: keywords.filter((k): k is string => typeof k === "string"),
-		authors: [{ name: "AI Prompts Hub" }],
-		creator: "AI Prompts Hub",
-		publisher: "AI Prompts Hub",
-		alternates: {
-			canonical: url,
-		},
-		openGraph: {
-			title,
-			description,
-			url,
-			siteName: "AI Prompts Hub",
-			images: [
-				{
-					url: ogImage,
-					width: 1200,
-					height: 630,
-					alt: prompt.title,
-				},
-			],
-			type: "article",
-			publishedTime: prompt.created_at,
-			modifiedTime: prompt.updated_at,
-			authors: ["AI Prompts Hub"],
-			section: prompt.categories?.name || "AI Prompts",
-			tags: prompt.tags || [],
-		},
-		twitter: {
-			card: "summary_large_image",
-			title,
-			description,
-			images: [ogImage],
-			creator: "@aipromptshub",
-		},
-		robots: {
-			index: true,
-			follow: true,
-			googleBot: {
-				index: true,
-				follow: true,
-				"max-video-preview": -1,
-				"max-image-preview": "large",
-				"max-snippet": -1,
-			},
-		},
-	};
-}
+      <main className="md:max-w-[80vw] mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section className="lg:col-span-2 space-y-6">
+          <div className="rounded-2xl border border-border/50 bg-card overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+            {prompt.reference_image_url && (
+              <div className="relative w-full aspect-video sm:aspect-[16/9] md:h-[500px] lg:h-[600px] bg-gradient-to-br from-primary/10 to-accent/10 overflow-hidden group">
+                <Image
+                  src={prompt.reference_image_url || "/placeholder.svg"}
+                  alt={prompt.title}
+                  fill
+                  className="object-contain group-hover:scale-105 transition-transform duration-300"
+                  priority
+                />
+              </div>
+            )}
+            <div className="p-6 sm:p-8 space-y-6">
+              <div>
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                      {prompt.is_trending && (
+                        <Badge className="flex items-center gap-1 bg-orange-500/20 text-orange-400 border-orange-500/30">
+                          <TrendingUp className="h-3 w-3" />
+                          Trending
+                        </Badge>
+                      )}
+                      {prompt.is_featured && (
+                        <Badge className="flex items-center gap-1 bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+                          <Star className="h-3 w-3" />
+                          Featured
+                        </Badge>
+                      )}
+                    </div>
+                    <h2 className="text-3xl sm:text-4xl font-bold text-card-foreground leading-tight">
+                      {prompt.title}
+                    </h2>
+                  </div>
+                  {prompt.categories && (
+                    <Badge
+                      className="flex-shrink-0 text-sm px-4 py-2 border"
+                      style={{
+                        backgroundColor: prompt.categories.color + "15",
+                        color: prompt.categories.color,
+                        borderColor: prompt.categories.color + "40",
+                      }}
+                    >
+                      {prompt.categories.name}
+                    </Badge>
+                  )}
+                </div>
+              </div>
 
-export default async function PromptPage({ params }: PageProps) {
-	const prompt = await getPromptBySlug(params.slug);
-	if (!prompt) return notFound();
+              {prompt.description && (
+                <div className="border-l-4 border-primary/50 pl-4">
+                  <p className="text-base text-muted-foreground leading-relaxed">{prompt.description}</p>
+                </div>
+              )}
 
-	// Structured data for SEO
-	const jsonLd = {
-		"@context": "https://schema.org",
-		"@type": "Article",
-		headline: prompt.title,
-		description: prompt.description || prompt.content.slice(0, 155),
-		image: prompt.reference_image_url || "/placeholder.jpg",
-		datePublished: prompt.created_at,
-		dateModified: prompt.updated_at,
-		author: {
-			"@type": "Organization",
-			name: "AI Prompts Hub",
-		},
-		publisher: {
-			"@type": "Organization",
-			name: "AI Prompts Hub",
-			logo: {
-				"@type": "ImageObject",
-				url: `${process.env.NEXT_PUBLIC_SITE_URL || ""}/placeholder-logo.png`,
-			},
-		},
-		articleSection: prompt.categories?.name || "AI Prompts",
-		keywords: [prompt.title, ...(prompt.tags || []), prompt.categories?.name]
-			.filter(Boolean)
-			.join(", "),
-		mainEntityOfPage: {
-			"@type": "WebPage",
-			"@id": `${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${prompt.slug}`,
-		},
-		interactionStatistic: [
-			{
-				"@type": "InteractionCounter",
-				interactionType: "https://schema.org/ViewAction",
-				userInteractionCount: prompt.views_count,
-			},
-			{
-				"@type": "InteractionCounter",
-				interactionType: "https://schema.org/LikeAction",
-				userInteractionCount: prompt.likes_count,
-			},
-		],
-		isAccessibleForFree: "True",
-		creativeWorkStatus: prompt.is_trending ? "Trending" : "Published",
-	};
+              <div>
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-accent" />
+                  The Prompt
+                </h3>
+                <div className="rounded-lg bg-muted/30 border border-border/50 p-4 sm:p-6 text-sm sm:text-base text-muted-foreground whitespace-pre-wrap break-words max-h-[500px] overflow-y-auto font-mono leading-relaxed">
+                  {prompt.content}
+                </div>
+              </div>
 
-	return (
-		<div className="min-h-screen bg-background">
-			{/* JSON-LD Structured Data */}
-			<script
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-			/>
-			<PageViewTracker promptId={prompt.id} />
-			<header className="border-b border-border">
-				<div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 flex items-center justify-between">
-					<div className="flex items-center gap-2 min-w-0 flex-1">
-						<Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
-						<h1 className="text-lg sm:text-xl font-semibold truncate">Prompt Details</h1>
-					</div>
-					<BackButton />
-				</div>
-			</header>
+              {prompt.tags?.length ? (
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-widest mb-3">Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {prompt.tags.map((t) => (
+                      <Badge key={t} variant="outline" className="text-xs font-medium">
+                        #{t}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
 
-			<main className="md:max-w-[80vw] mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-				<section className="lg:col-span-2">
-					<div className="rounded-xl border border-border bg-card overflow-hidden">
-						{prompt.reference_image_url && (
-							<div className="relative w-full aspect-video sm:aspect-[16/9] md:h-[500px] lg:h-[600px] bg-muted/20">
-								<Image
-									src={prompt.reference_image_url}
-									alt={prompt.title}
-									fill
-									className="object-contain"
-									priority
-								/>
-							</div>
-						)}
-						<div className="p-6 space-y-6">
-							{/* Title Section */}
-							<div>
-								
-								<div className="flex items-center justify-between gap-4">
-									<h2 className="text-2xl font-bold text-card-foreground">
-										{prompt.title}
-									</h2>
-									{prompt.categories && (
-										<Badge
-											variant="secondary"
-											className="text-xs"
-											style={{
-												backgroundColor:
-													prompt.categories.color + "20",
-												color: prompt.categories.color,
-											}}
-										>
-											{prompt.categories.name}
-										</Badge>
-									)}
-								</div>
-							</div>
+              <PromptActions
+                content={prompt.content}
+                title={prompt.title}
+                shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${prompt.slug}`}
+                promptId={prompt.id}
+              />
 
-							{/* Description Section */}
-							{prompt.description && (
-								<div>
-									<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-										Description
-									</h3>
-									<p className="text-muted-foreground">
-										{prompt.description}
-									</p>
-								</div>
-							)}
+              {prompt.seo_content ? (
+                <article
+                  className="prose prose-slate dark:prose-invert max-w-none border-t border-border/50 pt-6 prose-headings:text-foreground prose-p:text-muted-foreground prose-a:text-primary"
+                  dangerouslySetInnerHTML={{
+                    __html: prompt.seo_content || "",
+                  }}
+                />
+              ) : null}
 
-							{/* Prompt Content Section */}
-							<div>
-								<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-									Prompt
-								</h3>
-								<div className="rounded-lg bg-muted p-3 sm:p-4 text-sm sm:text-base text-muted-foreground whitespace-pre-wrap break-words max-h-[400px] sm:max-h-[500px] overflow-y-auto">
-									{prompt.content}
-								</div>
-							</div>
+              {/* ... existing ad code ... */}
+              <div className="border-t border-border/50 pt-6">
+                <EnhancedBannerAd adSlot="prompt-view-banner" className="my-4" />
+              </div>
+            </div>
+          </div>
 
-							{/* Tags Section */}
-							{prompt.tags?.length ? (
-								<div>
-									<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-										Tags
-									</h3>
-									<div className="flex flex-wrap gap-2">
-										{prompt.tags.map((t) => (
-											<Badge
-												key={t}
-												variant="outline"
-												className="text-xs"
-											>
-												{t}
-											</Badge>
-										))}
-									</div>
-								</div>
-							) : null}
-							<PromptActions
-								content={prompt.content}
-								title={prompt.title}
-								shareUrl={`${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${
-									prompt.slug
-								}`}
-								promptId={prompt.id}
-							/>
+          {/* ... existing bottom ad code ... */}
+          <PolicyCompliantAd adSlot="prompt-view-bottom" adFormat="auto" minContentHeight={800} position="bottom" />
+        </section>
 
-							{prompt.seo_content ? (
-								<article
-									className="prose prose-slate dark:prose-invert max-w-none border-t border-border pt-6"
-									dangerouslySetInnerHTML={{
-										__html: prompt.seo_content || "",
-									}}
-								/>
-							) : null}
+        <aside className="space-y-4">
+          {/* Premium Stats Card */}
+          <div className="rounded-xl border border-border/50 bg-gradient-to-br from-card to-card/80 p-6 shadow-lg">
+            <h3 className="font-bold text-lg mb-4 text-foreground">Engagement</h3>
+            <div className="space-y-4">
+              {/* Views Stat */}
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex items-center gap-2">
+                  <Eye className="h-4 w-4 text-blue-400" />
+                  <span className="text-sm text-muted-foreground">Views</span>
+                </div>
+                <span className="font-semibold text-foreground">{prompt.views_count.toLocaleString()}</span>
+              </div>
 
-							{/* Banner Ad after content */}
-							<div className="border-t border-border pt-6">
-								<EnhancedBannerAd 
-									adSlot="prompt-view-banner" 
-									className="my-4"
-								/>
-							</div>
-						</div>
-					</div>
+              {/* Copies Stat */}
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex items-center gap-2">
+                  <Copy className="h-4 w-4 text-green-400" />
+                  <span className="text-sm text-muted-foreground">Copies</span>
+                </div>
+                <span className="font-semibold text-foreground">{prompt.copies_count.toLocaleString()}</span>
+              </div>
 
-					{/* Bottom Ad: only show when there is substantial content */}
-					<PolicyCompliantAd 
-						adSlot="prompt-view-bottom" 
-						adFormat="auto"
-						minContentHeight={800}
-						position="bottom"
-					/>
-				</section>
+              {/* Status Indicators */}
+              <div className="space-y-2 pt-2 border-t border-border/50">
+                {prompt.is_trending && (
+                  <div className="flex items-center gap-2 text-orange-400 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
+                    Trending Now
+                  </div>
+                )}
+                {prompt.is_featured && (
+                  <div className="flex items-center gap-2 text-yellow-400 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+                    Featured
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
 
-				<aside className="space-y-4">
-					<div className="rounded-xl border border-border bg-card p-4">
-						<h3 className="font-semibold mb-2">About this prompt</h3>
-						<div className="text-sm text-muted-foreground space-y-1">
-							<p>Views: {prompt.views_count}</p>
-							<p>Copies: {prompt.copies_count}</p>
-							{prompt.is_trending ? <p>Trending now</p> : null}
-							{prompt.is_featured ? <p>Featured</p> : null}
-						</div>
-					</div>
+          {/* ... existing ad code ... */}
+          <AdSenseAd
+            adSlot="prompt-view-sidebar"
+            adFormat="vertical"
+            adStyle={{
+              display: "block",
+              width: "100%",
+              height: "250px",
+            }}
+            className="w-full"
+          />
+        </aside>
+      </main>
 
-					{/* Sidebar Ad */}
-					<AdSenseAd 
-						adSlot="prompt-view-sidebar"
-						adFormat="vertical"
-						adStyle={{ 
-							display: "block",
-							width: "100%",
-							height: "250px"
-						}}
-						className="w-full"
-					/>
-				</aside>
-			</main>
-
-			{/* Sidebar Ads: always show on prompt view pages */}
-			<EnhancedSidebarAd position="left" />
-			<EnhancedSidebarAd position="right" />
-		</div>
-	);
+      {/* ... existing sidebar ads ... */}
+      <EnhancedSidebarAd position="left" />
+      <EnhancedSidebarAd position="right" />
+    </div>
+  )
 }
