@@ -1,9 +1,10 @@
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
-import { Metadata } from "next";
-import { getCategoryBySlug, getPromptsByCategory } from "@/lib/database/prompts-server";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 import { CategoryPage } from "@/components/category-page";
+import Footer from "@/components/footer";
+import { Navbar } from "@/components/navbar";
+import { getCategoryBySlug, getPromptsByCategory } from "@/lib/database/prompts-server";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 interface CategoryPageProps {
 	params: {
@@ -108,7 +109,9 @@ export default async function Page({ params }: CategoryPageProps) {
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
 			<PageViewTracker />
+			<Navbar />
 			<CategoryPage category={category} initialPrompts={prompts} />
+			<Footer />
 		</>
 	);
 }

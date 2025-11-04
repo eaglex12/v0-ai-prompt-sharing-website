@@ -1,15 +1,13 @@
 "use client";
 
-import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
-import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAnalytics } from "@/hooks/use-analytics";
 import type { Category, Prompt } from "@/lib/database/prompts-client";
 import { searchPrompts } from "@/lib/database/prompts-client";
-import { ArrowLeft, Search, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowLeft, Search } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import PromptCard from "./prompt-card";
 import PromptModal from "./prompt-modal";
 
@@ -67,34 +65,6 @@ export function CategoryPage({ category, initialPrompts }: CategoryPageProps) {
 
 	return (
 		<div className="min-h-screen bg-background">
-			{/* Top Nav */}
-			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
-				<div className={`md:max-w-[80vw] mx-auto px-4 py-4`}>
-					<div className="flex items-center justify-between">
-						<Link
-							href="/"
-							className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-						>
-							<Sparkles className="h-7 w-7 text-primary" />
-							<span className="text-xl font-heading font-bold text-foreground">
-								AI Prompts Hub
-							</span>
-						</Link>
-						<div className="hidden md:block w-full max-w-lg ml-6">
-							<div className="relative">
-								<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-								<Input
-									placeholder="Search prompts..."
-									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
-									className="pl-10 bg-card border-border"
-								/>
-							</div>
-						</div>
-					</div>
-				</div>
-			</header>
-
 			{/* Category Header */}
 			<section className="relative overflow-hidden">
 				<div className="pointer-events-none absolute inset-0 -z-10">
@@ -199,17 +169,17 @@ export function CategoryPage({ category, initialPrompts }: CategoryPageProps) {
 					)}
 
 					{/* Banner Ad: only show when there is meaningful content */}
-					{prompts.length >= 3 && <EnhancedBannerAd adSlot="banner-ad-1" />}
+					{/* {prompts.length >= 3 && <EnhancedBannerAd adSlot="banner-ad-1" />} */}
 				</section>
 			</div>
 
 			{/* Sidebar Ads: only show when the page has enough content density */}
-			{prompts.length >= 3 && (
+			{/* {prompts.length >= 3 && (
 				<>
 					<EnhancedSidebarAd position="left" />
 					<EnhancedSidebarAd position="right" />
 				</>
-			)}
+			)} */}
 
 			{/* Prompt Detail Modal */}
 			<PromptModal
@@ -218,46 +188,6 @@ export function CategoryPage({ category, initialPrompts }: CategoryPageProps) {
 				selectedPrompt={selectedPrompt}
 				handleCopy={handleCopy}
 			/>
-
-			{/* Footer */}
-			<footer className="bg-card border-t border-border mt-16">
-				<div className={`max-w-[80vw] mx-auto px-4 py-8`}>
-					<div className="flex flex-col md:flex-row justify-between items-center">
-						<div className="flex items-center gap-2 mb-4 md:mb-0">
-							<Sparkles className="h-6 w-6 text-primary" />
-							<span className="font-heading font-semibold text-card-foreground">
-								AI Prompts Hub
-							</span>
-						</div>
-						<div className="flex gap-6 text-sm text-muted-foreground">
-							<Link
-								href="/about"
-								className="hover:text-foreground transition-colors"
-							>
-								About
-							</Link>
-							<Link
-								href="/contact"
-								className="hover:text-foreground transition-colors"
-							>
-								Contact
-							</Link>
-							<Link
-								href="/terms"
-								className="hover:text-foreground transition-colors"
-							>
-								Terms
-							</Link>
-							<Link
-								href="/privacy"
-								className="hover:text-foreground transition-colors"
-							>
-								Privacy
-							</Link>
-						</div>
-					</div>
-				</div>
-			</footer>
 		</div>
 	);
 }

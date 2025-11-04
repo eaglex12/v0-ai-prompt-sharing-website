@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import { Sparkles, Mail, MessageSquare, MapPin, Clock } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Navbar } from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
 	title: "Contact AI Prompts Hub - Get in Touch with Our Team",
-	description: "Contact AI Prompts Hub for support, feedback, or collaboration. We're here to help you discover the best AI prompts and improve your AI tool experience.",
+	description:
+		"Contact AI Prompts Hub for support, feedback, or collaboration. We're here to help you discover the best AI prompts and improve your AI tool experience.",
 	keywords: [
 		"contact AI prompts hub",
 		"AI prompt support",
@@ -15,7 +24,8 @@ export const metadata: Metadata = {
 	],
 	openGraph: {
 		title: "Contact AI Prompts Hub - We'd Love to Hear from You",
-		description: "Get in touch with our team for support, feedback, or collaboration opportunities.",
+		description:
+			"Get in touch with our team for support, feedback, or collaboration opportunities.",
 		type: "website",
 	},
 };
@@ -23,17 +33,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
 	return (
 		<div className="min-h-screen bg-background">
-			{/* Header */}
-			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
-				<div className="md:max-w-[80vw] mx-auto px-4 py-4">
-					<a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-						<Sparkles className="h-7 w-7 text-primary" />
-						<span className="text-xl font-heading font-bold text-foreground">
-							AI Prompts Hub
-						</span>
-					</a>
-				</div>
-			</header>
+			<Navbar />
 
 			{/* Hero Section */}
 			<section className="relative overflow-hidden">
@@ -51,7 +51,8 @@ export default function ContactPage() {
 							Get in Touch
 						</h1>
 						<p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-							Have questions, feedback, or ideas? We're here to help and would love to hear from you.
+							Have questions, feedback, or ideas? We're here to help and
+							would love to hear from you.
 						</p>
 					</div>
 				</div>
@@ -73,21 +74,27 @@ export default function ContactPage() {
 									<Mail className="h-5 w-5 text-muted-foreground mt-0.5" />
 									<div>
 										<p className="font-medium">Email</p>
-										<p className="text-muted-foreground">adivax143@gmail.com</p>
+										<p className="text-muted-foreground">
+											adivax143@gmail.com
+										</p>
 									</div>
 								</div>
 								<div className="flex items-start gap-3">
 									<Clock className="h-5 w-5 text-muted-foreground mt-0.5" />
 									<div>
 										<p className="font-medium">Response Time</p>
-										<p className="text-muted-foreground">Within 24 hours</p>
+										<p className="text-muted-foreground">
+											Within 24 hours
+										</p>
 									</div>
 								</div>
 								<div className="flex items-start gap-3">
 									<MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
 									<div>
 										<p className="font-medium">Location</p>
-										<p className="text-muted-foreground">Global Community</p>
+										<p className="text-muted-foreground">
+											Global Community
+										</p>
 									</div>
 								</div>
 							</CardContent>
@@ -109,7 +116,9 @@ export default function ContactPage() {
 									</li>
 									<li className="flex items-start gap-2">
 										<span className="text-primary mt-1">•</span>
-										<span>Partnership and collaboration opportunities</span>
+										<span>
+											Partnership and collaboration opportunities
+										</span>
 									</li>
 									<li className="flex items-start gap-2">
 										<span className="text-primary mt-1">•</span>
@@ -129,21 +138,31 @@ export default function ContactPage() {
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<div>
-									<h4 className="font-medium mb-1">How do I submit a prompt?</h4>
+									<h4 className="font-medium mb-1">
+										How do I submit a prompt?
+									</h4>
 									<p className="text-sm text-muted-foreground">
-										Currently, prompts are curated by our team. Contact us if you'd like to suggest a prompt for inclusion.
+										Currently, prompts are curated by our team.
+										Contact us if you'd like to suggest a prompt for
+										inclusion.
 									</p>
 								</div>
 								<div>
-									<h4 className="font-medium mb-1">Is AI Prompts Hub free?</h4>
+									<h4 className="font-medium mb-1">
+										Is AI Prompts Hub free?
+									</h4>
 									<p className="text-sm text-muted-foreground">
-										Yes! All prompts and features are completely free to use.
+										Yes! All prompts and features are completely free
+										to use.
 									</p>
 								</div>
 								<div>
-									<h4 className="font-medium mb-1">Can I use prompts commercially?</h4>
+									<h4 className="font-medium mb-1">
+										Can I use prompts commercially?
+									</h4>
 									<p className="text-sm text-muted-foreground">
-										Yes, all prompts on our platform are free to use for both personal and commercial projects.
+										Yes, all prompts on our platform are free to use
+										for both personal and commercial projects.
 									</p>
 								</div>
 							</CardContent>
@@ -159,7 +178,8 @@ export default function ContactPage() {
 								Join Our Community
 							</h2>
 							<p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-								Stay updated with the latest AI prompts, tips, and community highlights by following us on social media.
+								Stay updated with the latest AI prompts, tips, and
+								community highlights by following us on social media.
 							</p>
 							<div className="flex flex-col sm:flex-row gap-4 justify-center">
 								<a
@@ -181,45 +201,7 @@ export default function ContactPage() {
 				</section>
 			</div>
 
-			{/* Footer */}
-			<footer className="bg-card border-t border-border mt-16">
-				<div className="max-w-[80vw] mx-auto px-4 py-8">
-					<div className="flex flex-col md:flex-row justify-between items-center">
-						<div className="flex items-center gap-2 mb-4 md:mb-0">
-							<Sparkles className="h-6 w-6 text-primary" />
-							<span className="font-heading font-semibold text-card-foreground">
-								AI Prompts Hub
-							</span>
-						</div>
-						<div className="flex gap-6 text-sm text-muted-foreground">
-							<a
-								href="/about"
-								className="hover:text-foreground transition-colors"
-							>
-								About
-							</a>
-							<a
-								href="/contact"
-								className="hover:text-foreground transition-colors"
-							>
-								Contact
-							</a>
-							<a
-								href="/terms"
-								className="hover:text-foreground transition-colors"
-							>
-								Terms
-							</a>
-							<a
-								href="/privacy"
-								className="hover:text-foreground transition-colors"
-							>
-								Privacy
-							</a>
-						</div>
-					</div>
-				</div>
-			</footer>
+			<Footer />
 		</div>
 	);
 }

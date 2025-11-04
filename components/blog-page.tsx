@@ -1,18 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Search, Calendar, Clock, User, ArrowRight, TrendingUp } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import type { BlogPost, BlogCategory } from "@/lib/database/blog-client";
-import { searchBlogPosts, getBlogPostsByCategory } from "@/lib/database/blog-client";
-import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
-import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
 import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import type { BlogCategory, BlogPost } from "@/lib/database/blog-client";
+import { getBlogPostsByCategory, searchBlogPosts } from "@/lib/database/blog-client";
+import { ArrowRight, Calendar, Clock, Search, TrendingUp, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import Footer from "./footer";
 
 interface BlogPageProps {
 	initialPosts: BlogPost[];
@@ -64,42 +69,11 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 		return `${month}/${day}/${year}`;
 	};
 
-	const featuredPosts = posts.filter(post => post.is_featured).slice(0, 3);
-	const regularPosts = posts.filter(post => !post.is_featured);
+	const featuredPosts = posts.filter((post) => post.is_featured).slice(0, 3);
+	const regularPosts = posts.filter((post) => !post.is_featured);
 
 	return (
 		<div className="min-h-screen bg-background">
-			{/* Header */}
-			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
-				<div className="max-w-7xl mx-auto px-4 py-4">
-					<div className="flex items-center justify-between">
-						<Link
-							href="/"
-							className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-						>
-							<TrendingUp className="h-7 w-7 text-primary" />
-							<span className="text-xl font-heading font-bold text-foreground">
-								AI Prompts Hub
-							</span>
-						</Link>
-						<nav className="hidden md:flex gap-6">
-							<Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-								Prompts
-							</Link>
-							<Link href="/blog" className="text-sm font-medium text-foreground">
-								Blog
-							</Link>
-							<Link href="/categories" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-								Categories
-							</Link>
-							<Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-								About
-							</Link>
-						</nav>
-					</div>
-				</div>
-			</header>
-
 			{/* Hero Section */}
 			<section className="relative overflow-hidden">
 				<div className="pointer-events-none absolute inset-0 -z-10">
@@ -112,8 +86,9 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 							AI Prompts Blog
 						</h1>
 						<p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-							Discover the latest insights, tutorials, and trends in AI prompt engineering. 
-							Expert guides to help you master AI tools and create better prompts.
+							Discover the latest insights, tutorials, and trends in AI
+							prompt engineering. Expert guides to help you master AI tools
+							and create better prompts.
 						</p>
 					</div>
 				</div>
@@ -148,7 +123,11 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 						{categories.map((category) => (
 							<Button
 								key={category.id}
-								variant={selectedCategory === category.name ? "default" : "outline"}
+								variant={
+									selectedCategory === category.name
+										? "default"
+										: "outline"
+								}
 								size="sm"
 								onClick={() => setSelectedCategory(category.name)}
 							>
@@ -170,7 +149,10 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 							{featuredPosts.map((post) => (
-								<Card key={post.id} className="group hover:shadow-lg transition-shadow">
+								<Card
+									key={post.id}
+									className="group hover:shadow-lg transition-shadow"
+								>
 									<CardHeader>
 										{post.featured_image_url && (
 											<div className="relative w-full h-48 rounded-lg overflow-hidden mb-4">
@@ -187,7 +169,9 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 												<Badge
 													variant="secondary"
 													style={{
-														backgroundColor: post.blog_categories.color + "20",
+														backgroundColor:
+															post.blog_categories.color +
+															"20",
 														color: post.blog_categories.color,
 													}}
 												>
@@ -213,7 +197,12 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 											</div>
 											<div className="flex items-center gap-1">
 												<Calendar className="h-4 w-4" />
-												<span>{formatDate(post.published_at || post.created_at)}</span>
+												<span>
+													{formatDate(
+														post.published_at ||
+															post.created_at
+													)}
+												</span>
 											</div>
 											<div className="flex items-center gap-1">
 												<Clock className="h-4 w-4" />
@@ -247,7 +236,10 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 					) : (
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 							{regularPosts.map((post) => (
-								<Card key={post.id} className="group hover:shadow-lg transition-shadow">
+								<Card
+									key={post.id}
+									className="group hover:shadow-lg transition-shadow"
+								>
 									<CardHeader>
 										{post.featured_image_url && (
 											<div className="relative w-full h-48 rounded-lg overflow-hidden mb-4">
@@ -264,7 +256,9 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 												<Badge
 													variant="secondary"
 													style={{
-														backgroundColor: post.blog_categories.color + "20",
+														backgroundColor:
+															post.blog_categories.color +
+															"20",
 														color: post.blog_categories.color,
 													}}
 												>
@@ -289,7 +283,12 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 											</div>
 											<div className="flex items-center gap-1">
 												<Calendar className="h-4 w-4" />
-												<span>{formatDate(post.published_at || post.created_at)}</span>
+												<span>
+													{formatDate(
+														post.published_at ||
+															post.created_at
+													)}
+												</span>
 											</div>
 											<div className="flex items-center gap-1">
 												<Clock className="h-4 w-4" />
@@ -318,17 +317,17 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 					)}
 
 					{/* Banner Ad: only show when there are posts */}
-					{posts.length >= 3 && (
+					{/* {posts.length >= 3 && (
 						<EnhancedBannerAd 
 							adSlot="blog-page-banner" 
 							className="my-8"
 						/>
-					)}
+					)} */}
 
 					{/* Bottom Ad: only show when there is substantial content */}
 					{posts.length >= 6 && (
-						<PolicyCompliantAd 
-							adSlot="blog-page-bottom" 
+						<PolicyCompliantAd
+							adSlot="blog-page-bottom"
 							adFormat="auto"
 							minContentHeight={800}
 							position="bottom"
@@ -338,40 +337,14 @@ export function BlogPage({ initialPosts, initialCategories }: BlogPageProps) {
 			</div>
 
 			{/* Sidebar Ads: only show when there are enough posts */}
-			{posts.length >= 3 && (
+			{/* {posts.length >= 3 && (
 				<>
 					<EnhancedSidebarAd position="left" />
 					<EnhancedSidebarAd position="right" />
 				</>
-			)}
+			)} */}
 
-			{/* Footer */}
-			<footer className="bg-card border-t border-border mt-16">
-				<div className="max-w-7xl mx-auto px-4 py-8">
-					<div className="flex flex-col md:flex-row justify-between items-center">
-						<div className="flex items-center gap-2 mb-4 md:mb-0">
-							<TrendingUp className="h-6 w-6 text-primary" />
-							<span className="font-heading font-semibold text-card-foreground">
-								AI Prompts Hub
-							</span>
-						</div>
-						<div className="flex gap-6 text-sm text-muted-foreground">
-							<Link href="/about" className="hover:text-foreground transition-colors">
-								About
-							</Link>
-							<Link href="/contact" className="hover:text-foreground transition-colors">
-								Contact
-							</Link>
-							<Link href="/terms" className="hover:text-foreground transition-colors">
-								Terms
-							</Link>
-							<Link href="/privacy" className="hover:text-foreground transition-colors">
-								Privacy
-							</Link>
-						</div>
-					</div>
-				</div>
-			</footer>
+			<Footer />
 		</div>
 	);
 }

@@ -4,9 +4,6 @@ import { Button } from "@/components/ui/button";
 import type { Category } from "@/lib/database/prompts-client";
 import { ArrowLeft, Grid3X3, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { EnhancedBannerAd } from "@/components/ads/enhanced-banner-ad";
-import { EnhancedSidebarAd } from "@/components/ads/enhanced-sidebar-ad";
-import { PolicyCompliantAd } from "@/components/ads/policy-compliant-ad";
 
 interface CategoriesPageProps {
 	categories: Category[];
@@ -15,23 +12,6 @@ interface CategoriesPageProps {
 export function CategoriesPage({ categories }: CategoriesPageProps) {
 	return (
 		<div className="min-h-screen bg-background">
-			{/* Top Nav */}
-			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
-				<div className={`md:max-w-[80vw] mx-auto px-4 py-4`}>
-					<div className="flex items-center justify-between">
-						<Link
-							href="/"
-							className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-						>
-							<Sparkles className="h-7 w-7 text-primary" />
-							<span className="text-xl font-heading font-bold text-foreground">
-								AI Prompts Hub
-							</span>
-						</Link>
-					</div>
-				</div>
-			</header>
-
 			{/* Page Header */}
 			<section className="relative overflow-hidden">
 				<div className="pointer-events-none absolute inset-0 -z-10">
@@ -122,72 +102,32 @@ export function CategoriesPage({ categories }: CategoriesPageProps) {
 					)}
 
 					{/* Banner Ad: only show when there are categories */}
-					{categories.length >= 3 && (
-						<EnhancedBannerAd 
-							adSlot="categories-page-banner" 
+					{/* {categories.length >= 3 && (
+						<EnhancedBannerAd
+							adSlot="categories-page-banner"
 							className="my-8"
 						/>
-					)}
+					)} */}
 
 					{/* Bottom Ad: only show when there is substantial content */}
-					{categories.length >= 6 && (
-						<PolicyCompliantAd 
-							adSlot="categories-page-bottom" 
+					{/* {categories.length >= 6 && (
+						<PolicyCompliantAd
+							adSlot="categories-page-bottom"
 							adFormat="auto"
 							minContentHeight={800}
 							position="bottom"
 						/>
-					)}
+					)} */}
 				</section>
 			</div>
 
 			{/* Sidebar Ads: only show when there are enough categories */}
-			{categories.length >= 3 && (
+			{/* {categories.length >= 3 && (
 				<>
 					<EnhancedSidebarAd position="left" />
 					<EnhancedSidebarAd position="right" />
 				</>
-			)}
-
-			{/* Footer */}
-			<footer className="bg-card border-t border-border mt-16">
-				<div className={`max-w-[80vw] mx-auto px-4 py-8`}>
-					<div className="flex flex-col md:flex-row justify-between items-center">
-						<div className="flex items-center gap-2 mb-4 md:mb-0">
-							<Sparkles className="h-6 w-6 text-primary" />
-							<span className="font-heading font-semibold text-card-foreground">
-								AI Prompts Hub
-							</span>
-						</div>
-						<div className="flex gap-6 text-sm text-muted-foreground">
-							<Link
-								href="/about"
-								className="hover:text-foreground transition-colors"
-							>
-								About
-							</Link>
-							<Link
-								href="/contact"
-								className="hover:text-foreground transition-colors"
-							>
-								Contact
-							</Link>
-							<Link
-								href="/terms"
-								className="hover:text-foreground transition-colors"
-							>
-								Terms
-							</Link>
-							<Link
-								href="/privacy"
-								className="hover:text-foreground transition-colors"
-							>
-								Privacy
-							</Link>
-						</div>
-					</div>
-				</div>
-			</footer>
+			)} */}
 		</div>
 	);
 }

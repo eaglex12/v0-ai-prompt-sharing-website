@@ -1,11 +1,22 @@
+import Footer from "@/components/footer";
+import { Navbar } from "@/components/navbar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Cookie,
+	Database,
+	Eye,
+	Globe,
+	Lock,
+	Shield,
+	Sparkles,
+	Users,
+} from "lucide-react";
 import type { Metadata } from "next";
-import { Sparkles, Shield, Eye, Database, Cookie, Lock, Users, Globe } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
 	title: "Privacy Policy - AI Prompts Hub Data Protection",
-	description: "Read AI Prompts Hub's Privacy Policy to understand how we collect, use, and protect your personal information when using our AI prompt platform.",
+	description:
+		"Read AI Prompts Hub's Privacy Policy to understand how we collect, use, and protect your personal information when using our AI prompt platform.",
 	keywords: [
 		"privacy policy",
 		"AI prompts hub privacy",
@@ -16,7 +27,8 @@ export const metadata: Metadata = {
 	],
 	openGraph: {
 		title: "Privacy Policy - AI Prompts Hub",
-		description: "Learn how we protect your privacy and handle your data on AI Prompts Hub.",
+		description:
+			"Learn how we protect your privacy and handle your data on AI Prompts Hub.",
 		type: "website",
 	},
 };
@@ -38,22 +50,11 @@ export default function PrivacyPage() {
 
 	return (
 		<div className="min-h-screen bg-background">
+			<Navbar />
 			<script
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
-			
-			{/* Header */}
-			<header className="sticky top-0 z-40 bg-background/80 backdrop-blur border-b border-border">
-				<div className="md:max-w-[80vw] mx-auto px-4 py-4">
-					<a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-						<Sparkles className="h-7 w-7 text-primary" />
-						<span className="text-xl font-heading font-bold text-foreground">
-							AI Prompts Hub
-						</span>
-					</a>
-				</div>
-			</header>
 
 			{/* Hero Section */}
 			<section className="relative overflow-hidden">
@@ -71,10 +72,17 @@ export default function PrivacyPage() {
 							Privacy Policy
 						</h1>
 						<p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-							We are committed to protecting your privacy and being transparent about how we collect, use, and protect your information.
+							We are committed to protecting your privacy and being
+							transparent about how we collect, use, and protect your
+							information.
 						</p>
 						<p className="mt-2 text-sm text-muted-foreground">
-							Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+							Last updated:{" "}
+							{new Date().toLocaleDateString("en-US", {
+								year: "numeric",
+								month: "long",
+								day: "numeric",
+							})}
 						</p>
 					</div>
 				</div>
@@ -91,7 +99,9 @@ export default function PrivacyPage() {
 							</h2>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div className="space-y-3">
-									<h3 className="font-medium text-green-600">What We Do</h3>
+									<h3 className="font-medium text-green-600">
+										What We Do
+									</h3>
 									<ul className="space-y-2 text-sm text-muted-foreground">
 										<li className="flex items-start gap-2">
 											<span className="text-green-600 mt-1">✓</span>
@@ -112,7 +122,9 @@ export default function PrivacyPage() {
 									</ul>
 								</div>
 								<div className="space-y-3">
-									<h3 className="font-medium text-blue-600">Your Rights</h3>
+									<h3 className="font-medium text-blue-600">
+										Your Rights
+									</h3>
 									<ul className="space-y-2 text-sm text-muted-foreground">
 										<li className="flex items-start gap-2">
 											<span className="text-blue-600 mt-1">✓</span>
@@ -149,26 +161,41 @@ export default function PrivacyPage() {
 						<CardContent className="space-y-4">
 							<div className="space-y-4">
 								<div>
-									<h4 className="font-medium mb-2">Information You Provide</h4>
+									<h4 className="font-medium mb-2">
+										Information You Provide
+									</h4>
 									<p className="text-muted-foreground text-sm">
-										We collect minimal information that you voluntarily provide, such as:
+										We collect minimal information that you
+										voluntarily provide, such as:
 									</p>
 									<ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4 mt-2">
-										<li>Contact form submissions (name, email, message)</li>
+										<li>
+											Contact form submissions (name, email,
+											message)
+										</li>
 										<li>Feedback and suggestions</li>
 										<li>Any communications you send to us</li>
 									</ul>
 								</div>
 								<div>
-									<h4 className="font-medium mb-2">Automatically Collected Information</h4>
+									<h4 className="font-medium mb-2">
+										Automatically Collected Information
+									</h4>
 									<p className="text-muted-foreground text-sm">
-										We collect minimal technical information server-side for basic functionality:
+										We collect minimal technical information
+										server-side for basic functionality:
 									</p>
 									<ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4 mt-2">
-										<li>IP address (for basic analytics and security)</li>
-										<li>Browser type and version (from user agent)</li>
+										<li>
+											IP address (for basic analytics and security)
+										</li>
+										<li>
+											Browser type and version (from user agent)
+										</li>
 										<li>Device information (mobile/desktop)</li>
-										<li>Page views and interactions (server-side only)</li>
+										<li>
+											Page views and interactions (server-side only)
+										</li>
 										<li>No cookies or persistent tracking</li>
 									</ul>
 								</div>
@@ -185,7 +212,8 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								We use the information we collect for the following purposes:
+								We use the information we collect for the following
+								purposes:
 							</p>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								<div className="space-y-3">
@@ -219,25 +247,61 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								We do not use cookies or similar tracking technologies on our website. We collect minimal information server-side for basic functionality:
+								We do not use cookies or similar tracking technologies on
+								our website. We collect minimal information server-side
+								for basic functionality:
 							</p>
 							<div className="space-y-4">
 								<div>
-									<h4 className="font-medium mb-2">No Essential Cookies</h4>
+									<h4 className="font-medium mb-2">
+										No Essential Cookies
+									</h4>
 									<p className="text-sm text-muted-foreground">
-										We do not use essential cookies. Our website functions without requiring any cookies.
+										We do not use essential cookies. Our website
+										functions without requiring any cookies.
 									</p>
 								</div>
 								<div>
-									<h4 className="font-medium mb-2">No Analytics Cookies</h4>
+									<h4 className="font-medium mb-2">
+										No Analytics Cookies
+									</h4>
 									<p className="text-sm text-muted-foreground">
-										We do not use analytics cookies or tracking cookies. We collect basic usage statistics server-side without storing any cookies on your device.
+										We do not use analytics cookies or tracking
+										cookies. We collect basic usage statistics
+										server-side without storing any cookies on your
+										device.
 									</p>
 								</div>
 								<div>
-									<h4 className="font-medium mb-2">Advertising Cookies</h4>
+									<h4 className="font-medium mb-2">
+										Advertising Cookies
+									</h4>
 									<p className="text-sm text-muted-foreground">
-										We use Google AdSense to display relevant advertisements. Google may use cookies, web beacons, and similar technologies to collect information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you. You can opt-out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Google Ad Settings</a> or <a href="https://www.aboutads.info/choices/" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Digital Advertising Alliance</a>.
+										We use Google AdSense to display relevant
+										advertisements. Google may use cookies, web
+										beacons, and similar technologies to collect
+										information about your visits to this and other
+										websites in order to provide advertisements about
+										goods and services of interest to you. You can
+										opt-out of personalized advertising by visiting{" "}
+										<a
+											href="https://www.google.com/settings/ads"
+											className="text-primary hover:underline"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											Google Ad Settings
+										</a>{" "}
+										or{" "}
+										<a
+											href="https://www.aboutads.info/choices/"
+											className="text-primary hover:underline"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											Digital Advertising Alliance
+										</a>
+										.
 									</p>
 								</div>
 							</div>
@@ -253,7 +317,8 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								We implement appropriate security measures to protect your personal information:
+								We implement appropriate security measures to protect your
+								personal information:
 							</p>
 							<ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
 								<li>Encryption of data in transit and at rest</li>
@@ -263,8 +328,10 @@ export default function PrivacyPage() {
 								<li>Regular backups and disaster recovery</li>
 							</ul>
 							<p className="text-muted-foreground leading-relaxed">
-								However, no method of transmission over the Internet or electronic storage is 100% secure. 
-								While we strive to protect your personal information, we cannot guarantee absolute security.
+								However, no method of transmission over the Internet or
+								electronic storage is 100% secure. While we strive to
+								protect your personal information, we cannot guarantee
+								absolute security.
 							</p>
 						</CardContent>
 					</Card>
@@ -284,20 +351,41 @@ export default function PrivacyPage() {
 								<div>
 									<h4 className="font-medium">Analytics Services</h4>
 									<p className="text-sm text-muted-foreground">
-										We do not use third-party analytics services like Google Analytics. We collect basic usage statistics server-side without any tracking cookies or personal data collection.
+										We do not use third-party analytics services like
+										Google Analytics. We collect basic usage
+										statistics server-side without any tracking
+										cookies or personal data collection.
 									</p>
 								</div>
 								<div>
 									<h4 className="font-medium">Advertising Services</h4>
 									<p className="text-sm text-muted-foreground">
-										We use Google AdSense to display relevant advertisements. Google may use cookies, web beacons, and similar technologies to collect information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you. For more information about how Google uses data when you use our site, visit <a href="https://policies.google.com/technologies/partner-sites" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">How Google uses data when you use our partners' sites or apps</a>.
+										We use Google AdSense to display relevant
+										advertisements. Google may use cookies, web
+										beacons, and similar technologies to collect
+										information about your visits to this and other
+										websites in order to provide advertisements about
+										goods and services of interest to you. For more
+										information about how Google uses data when you
+										use our site, visit{" "}
+										<a
+											href="https://policies.google.com/technologies/partner-sites"
+											className="text-primary hover:underline"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											How Google uses data when you use our
+											partners' sites or apps
+										</a>
+										.
 									</p>
 								</div>
 								<div>
 									<h4 className="font-medium">Hosting Services</h4>
 									<p className="text-sm text-muted-foreground">
-										Our website is hosted on secure cloud infrastructure. 
-										These providers may have access to certain technical information.
+										Our website is hosted on secure cloud
+										infrastructure. These providers may have access to
+										certain technical information.
 									</p>
 								</div>
 							</div>
@@ -313,9 +401,11 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								Your information may be transferred to and processed in countries other than your own. 
-								We ensure that such transfers comply with applicable data protection laws and implement 
-								appropriate safeguards to protect your personal information.
+								Your information may be transferred to and processed in
+								countries other than your own. We ensure that such
+								transfers comply with applicable data protection laws and
+								implement appropriate safeguards to protect your personal
+								information.
 							</p>
 						</CardContent>
 					</Card>
@@ -326,11 +416,14 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								Depending on your location, you may have certain rights regarding your personal information:
+								Depending on your location, you may have certain rights
+								regarding your personal information:
 							</p>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								<div className="space-y-2">
-									<h4 className="font-medium">Access and Portability</h4>
+									<h4 className="font-medium">
+										Access and Portability
+									</h4>
 									<ul className="space-y-1 text-sm text-muted-foreground">
 										<li>• Request access to your data</li>
 										<li>• Receive a copy of your data</li>
@@ -347,7 +440,8 @@ export default function PrivacyPage() {
 								</div>
 							</div>
 							<p className="text-muted-foreground leading-relaxed">
-								To exercise these rights, please contact us using the information provided in the Contact section.
+								To exercise these rights, please contact us using the
+								information provided in the Contact section.
 							</p>
 						</CardContent>
 					</Card>
@@ -358,9 +452,11 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								Our service is not intended for children under 13 years of age. We do not knowingly collect 
-								personal information from children under 13. If you are a parent or guardian and believe 
-								your child has provided us with personal information, please contact us.
+								Our service is not intended for children under 13 years of
+								age. We do not knowingly collect personal information from
+								children under 13. If you are a parent or guardian and
+								believe your child has provided us with personal
+								information, please contact us.
 							</p>
 						</CardContent>
 					</Card>
@@ -371,12 +467,14 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								We may update this Privacy Policy from time to time. We will notify you of any changes by 
-								posting the new Privacy Policy on this page and updating the "Last updated" date.
+								We may update this Privacy Policy from time to time. We
+								will notify you of any changes by posting the new Privacy
+								Policy on this page and updating the "Last updated" date.
 							</p>
 							<p className="text-muted-foreground leading-relaxed">
-								We encourage you to review this Privacy Policy periodically for any changes. 
-								Changes to this Privacy Policy are effective when they are posted on this page.
+								We encourage you to review this Privacy Policy
+								periodically for any changes. Changes to this Privacy
+								Policy are effective when they are posted on this page.
 							</p>
 						</CardContent>
 					</Card>
@@ -387,12 +485,21 @@ export default function PrivacyPage() {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<p className="text-muted-foreground leading-relaxed">
-								If you have any questions about this Privacy Policy or our privacy practices, please contact us:
+								If you have any questions about this Privacy Policy or our
+								privacy practices, please contact us:
 							</p>
 							<div className="bg-muted p-4 rounded-lg">
 								<p className="font-medium">AI Prompts Hub</p>
 								<p>Email: adivax143@gmail.com</p>
-								<p>Website: <a href="/contact" className="text-primary hover:underline">Contact Us</a></p>
+								<p>
+									Website:{" "}
+									<a
+										href="/contact"
+										className="text-primary hover:underline"
+									>
+										Contact Us
+									</a>
+								</p>
 							</div>
 						</CardContent>
 					</Card>
@@ -406,8 +513,9 @@ export default function PrivacyPage() {
 								Questions About Privacy?
 							</h2>
 							<p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-								We're committed to transparency and protecting your privacy. 
-								If you have any questions or concerns, we're here to help.
+								We're committed to transparency and protecting your
+								privacy. If you have any questions or concerns, we're here
+								to help.
 							</p>
 							<div className="flex flex-col sm:flex-row gap-4 justify-center">
 								<a
@@ -429,45 +537,7 @@ export default function PrivacyPage() {
 				</section>
 			</div>
 
-			{/* Footer */}
-			<footer className="bg-card border-t border-border mt-16">
-				<div className="max-w-[80vw] mx-auto px-4 py-8">
-					<div className="flex flex-col md:flex-row justify-between items-center">
-						<div className="flex items-center gap-2 mb-4 md:mb-0">
-							<Sparkles className="h-6 w-6 text-primary" />
-							<span className="font-heading font-semibold text-card-foreground">
-								AI Prompts Hub
-							</span>
-						</div>
-						<div className="flex gap-6 text-sm text-muted-foreground">
-							<a
-								href="/about"
-								className="hover:text-foreground transition-colors"
-							>
-								About
-							</a>
-							<a
-								href="/contact"
-								className="hover:text-foreground transition-colors"
-							>
-								Contact
-							</a>
-							<a
-								href="/terms"
-								className="hover:text-foreground transition-colors"
-							>
-								Terms
-							</a>
-							<a
-								href="/privacy"
-								className="hover:text-foreground transition-colors"
-							>
-								Privacy
-							</a>
-						</div>
-					</div>
-				</div>
-			</footer>
+			<Footer />
 		</div>
 	);
 }

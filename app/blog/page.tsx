@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { getAllBlogPosts, getAllBlogCategories } from "@/lib/database/blog";
 import { BlogPage } from "@/components/blog-page";
 import type { Metadata } from "next";
+import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
 	title: "Blog - AI Prompts Hub",
@@ -37,8 +38,7 @@ export default async function Page() {
 		"@context": "https://schema.org",
 		"@type": "Blog",
 		name: "AI Prompts Hub Blog",
-		description:
-			"Latest insights, tutorials, and trends in AI prompt engineering",
+		description: "Latest insights, tutorials, and trends in AI prompt engineering",
 		url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://prompt.org.in"}/blog`,
 		author: {
 			"@type": "Organization",
@@ -48,7 +48,9 @@ export default async function Page() {
 			"@type": "BlogPosting",
 			headline: post.title,
 			description: post.excerpt,
-			url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://prompt.org.in"}/blog/${post.slug}`,
+			url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://prompt.org.in"}/blog/${
+				post.slug
+			}`,
 			datePublished: post.published_at,
 			author: {
 				"@type": "Person",
@@ -63,11 +65,9 @@ export default async function Page() {
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
+			<Navbar />
 			<Suspense fallback={null}>
-				<BlogPage 
-					initialPosts={blogPosts}
-					initialCategories={blogCategories}
-				/>
+				<BlogPage initialPosts={blogPosts} initialCategories={blogCategories} />
 			</Suspense>
 		</>
 	);

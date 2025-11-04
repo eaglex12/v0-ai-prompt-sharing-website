@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { getAllCategories } from "@/lib/database/prompts-server";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 import { CategoriesPage } from "@/components/categories-page";
+import { Navbar } from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
 	title: "All Categories - Browse AI Prompts by Category | AI Prompts Hub",
@@ -67,7 +69,9 @@ export default async function Page() {
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
 			<PageViewTracker />
+			<Navbar />
 			<CategoriesPage categories={categories} />
+			<Footer />
 		</>
 	);
 }
