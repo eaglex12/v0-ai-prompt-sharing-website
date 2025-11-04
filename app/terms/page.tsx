@@ -358,7 +358,7 @@ export default function TermsPage() {
 					</Card>
 				</section>
 			</div>
-
+			{/* Test */}
 			<Footer />
 		</div>
 	);
